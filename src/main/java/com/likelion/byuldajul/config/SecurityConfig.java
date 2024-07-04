@@ -1,20 +1,38 @@
 package com.likelion.byuldajul.config;
 
+import com.likelion.byuldajul.user.filter.CustomLoginFilter;
+import com.likelion.byuldajul.user.filter.JwtFilter;
+import com.likelion.byuldajul.user.repository.UserRepository;
+import com.likelion.byuldajul.user.utils.JwtUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final AuthenticationConfiguration authenticationConfiguration;
+    private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
 
     @Bean //암호화 메서드
     public BCryptPasswordEncoder bCryptPasswordEncoder() { return new BCryptPasswordEncoder(); }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 
     //인증이 필요하지 않은 url
     private final String[] allowedUrls = {
@@ -55,6 +73,19 @@ public class SecurityConfig {
         http
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        // Login Filter
+        CustomLoginFilter loginFilter = new CustomLoginFilter(
+                authenticationManager(authenticationConfiguration), jwtUtil);
+        // Login Filter URL 지정
+        loginFilter.setFilterProcessesUrl("/users/login");
+
+        // filter chain 에 login filter 등록
+        http
+                .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
+        // login filter 전에 Auth Filter 등록
+        http
+                .addFilterBefore(new JwtFilter(jwtUtil, userRepository), CustomLoginFilter.class);
 
         return http.build();
     }
