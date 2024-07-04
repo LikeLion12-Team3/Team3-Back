@@ -1,15 +1,13 @@
 package com.likelion.byuldajul.user.repository;
 
-import com.likelion.byuldajul.user.entity.User;
+import com.likelion.byuldajul.user.entity.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface TokenRepository extends JpaRepository<Token, String> {
 
-    Optional<User> findByEmail(String email);
-
-    Boolean existsByEmail(String email);
+    Optional<Token> findByEmail(String email);
 }
