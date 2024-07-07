@@ -3,11 +3,13 @@ package com.likelion.byuldajul.user.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter //필드가 newPassword 하나이므로 Builder 대신 Setter를 사용하였습니다.
+@NoArgsConstructor
 public class UpdatePasswordRequestDto {
 
     @Size(min = 8, max = 64, message = "[ERROR] 비밀번호는 8자 이상, 64자 이하여야 합니다.")
@@ -15,4 +17,8 @@ public class UpdatePasswordRequestDto {
     @NotBlank(message = "[ERROR] 비밀번호는 필수 입력값입니다.")
     private String newPassword;
 
+    @Builder
+    public UpdatePasswordRequestDto(String newPassword) {
+        this.newPassword = newPassword;
+    }
 }

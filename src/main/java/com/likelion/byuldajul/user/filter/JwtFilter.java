@@ -1,10 +1,14 @@
 package com.likelion.byuldajul.user.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.likelion.byuldajul.exception.ErrorResponse;
 import com.likelion.byuldajul.user.entity.User;
 import com.likelion.byuldajul.user.repository.UserRepository;
 import com.likelion.byuldajul.user.userDetails.CustomUserDetails;
 import com.likelion.byuldajul.user.utils.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -44,7 +48,7 @@ public class JwtFilter extends OncePerRequestFilter {
             if (accessToken == null) {
                 log.info("[ JwtAuthorizationFilter ] Access Token 이 존재하지 않음. 필터를 건너뜁니다.");
                 filterChain.doFilter(request, response);
-                return;
+                return; //이놈의 return을 빼먹어서!!!!!!!!! 새벽 3시까지!!!!! 하...어쩐지!!!!!!
             }
 
             authenticateAccessToken(accessToken);
@@ -52,9 +56,11 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (ExpiredJwtException e) {
             log.warn("[ JwtAuthorizationFilter ] accessToken 이 만료되었습니다.");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value()); // 401 return
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("Access Token 이 만료되었습니다.");
+            handleException(response, "Access Token 이 만료되었습니다.", HttpStatus.UNAUTHORIZED);
+        } catch (SecurityException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
+            // 추가된 부분: 잘못된 토큰 예외 처리
+            log.warn("[ JwtAuthorizationFilter ] 잘못된 토큰입니다.");
+            handleException(response, "잘못된 토큰입니다.", HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -89,5 +95,14 @@ public class JwtFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
         log.info("[ JwtAuthorizationFilter ] 인증 객체 저장 완료");
+    }
+
+    // 예외를 처리하고 응답 본문을 설정하는 메서드
+    private void handleException(HttpServletResponse response, String message, HttpStatus status) throws IOException {
+        response.setStatus(status.value());
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        ErrorResponse errorResponse = new ErrorResponse(status.getReasonPhrase(), message);
+        response.getWriter().write(new ObjectMapper().writeValueAsString(errorResponse));
     }
 }
