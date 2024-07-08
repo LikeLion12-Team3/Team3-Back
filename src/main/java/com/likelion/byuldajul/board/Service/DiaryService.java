@@ -1,5 +1,8 @@
 package com.likelion.byuldajul.board.Service;
 
+
+import com.likelion.byuldajul.board.Dto.reponse.DiaryListResponseDto;
+import com.likelion.byuldajul.board.Dto.reponse.DiaryResponseDto;
 import com.likelion.byuldajul.board.Dto.request.CreateDiaryRequestDto;
 import com.likelion.byuldajul.board.Entity.Diary;
 import com.likelion.byuldajul.board.Entity.DiaryHashtag;
@@ -12,7 +15,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 
 @Service
 @Slf4j
@@ -35,8 +41,8 @@ public class DiaryService {
             Hashtag hashtag;
             hashtag = optionalHashtag.orElseGet(() ->
                     hashtagRepository.save(Hashtag.builder()
-                    .name(hashtagName)
-                    .build()));
+                            .name(hashtagName)
+                            .build()));
 
             log.info(hashtag.toString());
 
@@ -52,5 +58,18 @@ public class DiaryService {
 
         return diary.getId();
     }
+
+    public List<DiaryListResponseDto> getDiaryList(String hashtag) {
+        List<Diary> diaryList = diaryRepository.findByHashTag(hashtag);
+
+        List<DiaryListResponseDto> responseDtoList = diaryList.stream()
+                .map(DiaryListResponseDto::from)
+                .collect(Collectors.toList());
+        return responseDtoList;
+
+    }
+
 }
+
+
 

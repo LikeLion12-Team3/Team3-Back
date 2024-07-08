@@ -1,11 +1,14 @@
 package com.likelion.byuldajul.board.Controller;
 
+import com.likelion.byuldajul.board.Dto.reponse.DiaryListResponseDto;
+import com.likelion.byuldajul.board.Dto.reponse.DiaryResponseDto;
 import com.likelion.byuldajul.board.Dto.request.CreateDiaryRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import com.likelion.byuldajul.board.Service.DiaryService;
 
+import java.util.List;
 
 
 @Slf4j
@@ -26,9 +29,14 @@ public class DiaryController {
 
         diaryService.save(createDiaryRequestDto);
 
-        // hashtag add
+
 
         return "일기 생성";
+    }
+
+    @GetMapping()
+    public List<DiaryListResponseDto> getDiaryList(@RequestParam String hashtag) {
+        return diaryService.getDiaryList(hashtag);
     }
 
 

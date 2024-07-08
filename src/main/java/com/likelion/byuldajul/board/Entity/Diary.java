@@ -33,9 +33,6 @@ public class Diary extends Base{
 
     private String plan;
 
-    @OneToMany(mappedBy = "diary")
-    private List<DiaryHashtag> diaryHashtags = new ArrayList<>();
-
     @Builder
     public Diary(String title, String template, String mainText, String impression, String remark, String plan){
         this.title = title;
@@ -44,8 +41,8 @@ public class Diary extends Base{
         this.impression = impression;
         this.remark = remark;
         this.plan = plan;
-
     }
+
 
 
 
