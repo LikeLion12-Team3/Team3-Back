@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.token.TokenService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -48,7 +49,7 @@ public class JwtFilter extends OncePerRequestFilter {
             if (accessToken == null) {
                 log.info("[ JwtAuthorizationFilter ] Access Token 이 존재하지 않음. 필터를 건너뜁니다.");
                 filterChain.doFilter(request, response);
-                return; //이놈의 return을 빼먹어서!!!!!!!!! 새벽 3시까지!!!!! 하...어쩐지!!!!!!
+                return;
             }
 
             authenticateAccessToken(accessToken);
@@ -60,7 +61,7 @@ public class JwtFilter extends OncePerRequestFilter {
         } catch (SecurityException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
             // 추가된 부분: 잘못된 토큰 예외 처리
             log.warn("[ JwtAuthorizationFilter ] 잘못된 토큰입니다.");
-            handleException(response, "잘못된 토큰입니다.", HttpStatus.UNAUTHORIZED);
+            throw e;
         }
     }
 
