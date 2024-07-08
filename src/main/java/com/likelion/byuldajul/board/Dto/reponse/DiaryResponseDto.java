@@ -18,12 +18,23 @@ import java.util.stream.Collectors;
 public class DiaryResponseDto {
 
     private Long id;
+
     private LocalDateTime createdAt;
+
     private LocalDateTime modifiedAt;
+
     private String title;
+
     private String template;
+
     private String mainText;
+
     private String impression;
+
+    private String remark;
+
+    private String plan;
+
     private List<String> hashtagNames;
 
 

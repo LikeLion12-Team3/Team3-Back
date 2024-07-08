@@ -29,17 +29,22 @@ public class Diary extends Base{
 
     private String impression;
 
+    private String remark;
+
+    private String plan;
+
     @OneToMany(mappedBy = "diary")
     private List<DiaryHashtag> diaryHashtags = new ArrayList<>();
 
     @Builder
-    public Diary(String title, String template, String mainText, String impression, List<DiaryHashtag> diary_hashtags){
-//        super.createdAt =createdAt;
+    public Diary(String title, String template, String mainText, String impression, String remark, String plan){
         this.title = title;
         this.template = template;
         this.mainText = mainText;
         this.impression = impression;
-//        this.diaryHashtags = diary_hashtags;
+        this.remark = remark;
+        this.plan = plan;
+
     }
 
 

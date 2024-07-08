@@ -24,6 +24,10 @@ public class CreateDiaryRequestDto {
 
     private String impression;
 
+    private String remark;
+
+    private String plan;
+
     private List<String> diaryHashtags = new ArrayList<>();
 
     public Diary toEntity(){
@@ -32,6 +36,8 @@ public class CreateDiaryRequestDto {
                 .template(template)
                 .mainText(mainText)
                 .impression(impression)
+                .remark(remark)
+                .plan(plan)
                 .build();
     }
 
