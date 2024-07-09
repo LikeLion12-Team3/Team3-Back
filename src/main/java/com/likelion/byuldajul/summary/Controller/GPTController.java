@@ -1,30 +1,31 @@
-package com.likelion.byuldajul.analysis.Controller;
+package com.likelion.byuldajul.summary.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.likelion.byuldajul.analysis.Dto.request.GPTRequestDto;
-import com.likelion.byuldajul.analysis.Dto.response.GPTMessageDto;
-import com.likelion.byuldajul.analysis.Dto.response.GPTResponseDto;
+import com.likelion.byuldajul.summary.Dto.request.GPTRequestDto;
+import com.likelion.byuldajul.summary.Dto.response.GPTResponseDto;
 
 import java.util.Collections;
 
 
+@RequestMapping("gpt")
 @RestController
 public class GPTController {
 
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("${api.key}")
+    @Value("${gpt.api.key}")
     private String apiKey;
 
-    @Value("${api.url}")
+    @Value("${gpt.api.url}")
     private String apiUrl;
 
     @GetMapping("/chat")
@@ -36,7 +37,7 @@ public class GPTController {
         // OpenAI Chat Completion API 요청에 맞는 GPTRequestDto 객체 생성 (빌더 패턴 사용)
         GPTRequestDto requestDto = GPTRequestDto.builder()
                 .model("gpt-3.5-turbo")
-                .messages(Collections.singletonList(new GPTMessageDto("user", prompt))) // prompt를 메시지로 추가
+//                .messages(Collections.singletonList(new GPTMessageDto("user", prompt))) // prompt를 메시지로 추가
                 .temperature(0.2)
                 .maxTokens(100)
                 .topP(1.0)

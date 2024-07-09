@@ -1,4 +1,4 @@
-package com.likelion.byuldajul.analysis.Dto.response;
+package com.likelion.byuldajul.summary.Dto.response;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

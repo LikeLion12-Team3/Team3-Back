@@ -1,4 +1,4 @@
-package com.likelion.byuldajul.analysis.Entity;
+package com.likelion.byuldajul.summary.Entity;
 
 
 import jakarta.persistence.*;
