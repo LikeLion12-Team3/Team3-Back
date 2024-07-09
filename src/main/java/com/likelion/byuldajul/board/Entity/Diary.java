@@ -43,8 +43,13 @@ public class Diary extends Base{
         this.plan = plan;
     }
 
-
-
-
+    public void update(String title, String template, String mainText, String impression, String remark, String plan){
+        this.title = title;
+        this.template = template;
+        this.mainText = mainText;
+        this.impression = impression;
+        this.remark = remark;
+        this.plan = plan;
+    }
 
 }
