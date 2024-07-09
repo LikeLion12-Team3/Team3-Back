@@ -2,14 +2,15 @@ package com.likelion.byuldajul.board.Dto.reponse;
 
 import com.likelion.byuldajul.board.Entity.Diary;
 import com.likelion.byuldajul.board.Entity.DiaryHashtag;
+import com.likelion.byuldajul.board.Entity.Hashtag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
@@ -36,6 +37,5 @@ public class DiaryResponseDto {
     private String plan;
 
     private List<String> hashtagNames;
-
 
 }
