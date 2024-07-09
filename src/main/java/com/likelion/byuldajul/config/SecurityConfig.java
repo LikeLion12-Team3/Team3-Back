@@ -46,8 +46,12 @@ public class SecurityConfig {
     private final String[] allowedUrls = {
             "/users/login", //로그인은 인증이 필요하지 않음
             "/users/signup", //회원가입은 인증이 필요하지 않음
-            "/auth/reissue" //토큰 재발급은 인증이 필요하지 않음
+            "/auth/reissue", //토큰 재발급은 인증이 필요하지 않음
+            "api/usage",  //swagger 관련 URL
+            "/swagger-ui/**",
+            "/v3/api-docs/**"
     };
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
