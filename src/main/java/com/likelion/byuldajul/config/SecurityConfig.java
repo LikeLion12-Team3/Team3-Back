@@ -1,5 +1,7 @@
 package com.likelion.byuldajul.config;
 
+import com.likelion.byuldajul.exception.CustomAccessDeniedHandler;
+import com.likelion.byuldajul.exception.CustomAuthenticationEntryPoint;
 import com.likelion.byuldajul.user.filter.CustomLoginFilter;
 import com.likelion.byuldajul.user.filter.CustomLogoutHandler;
 import com.likelion.byuldajul.user.filter.JwtFilter;
@@ -17,7 +19,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -30,6 +31,8 @@ public class SecurityConfig {
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final TokenService tokenService;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean //암호화 메서드
     public BCryptPasswordEncoder bCryptPasswordEncoder() { return new BCryptPasswordEncoder(); }
@@ -79,6 +82,13 @@ public class SecurityConfig {
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+        // Custom AuthenticationEntryPoint와 AccessDeniedHandler 등록
+        http
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler)
+                );
+
         // Login Filter
         CustomLoginFilter loginFilter = new CustomLoginFilter(
                 authenticationManager(authenticationConfiguration), jwtUtil);
@@ -91,6 +101,7 @@ public class SecurityConfig {
         // login filter 전에 Auth Filter 등록
         http
                 .addFilterBefore(new JwtFilter(jwtUtil, userRepository), CustomLoginFilter.class);
+
 
         // Logout Filter 추가
         http
