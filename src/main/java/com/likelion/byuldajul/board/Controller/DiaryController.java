@@ -39,5 +39,15 @@ public class DiaryController {
         return diaryService.getDiaryList(hashtag);
     }
 
+//    @GetMapping("/{Id}")
+//    public DiaryResponseDto getDiary(@PathVariable Long Id) {
+//        return diaryService.getDiary(Id);
+//    }
+
+    @GetMapping("/{id}")
+    public DiaryResponseDto getDiary(@PathVariable Long id) {
+        return diaryService.getDiary(id);
+    }
+
 
 }

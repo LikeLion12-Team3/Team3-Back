@@ -17,6 +17,8 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
             " from hashtags h, diary_hashtag dh" +
             " where h.hashtag_id = dh.hashtag_id and h.name = :hashtag)", nativeQuery = true)
     List<Diary> findByHashTag(String hashtag);
+    Diary findDiaryById(Long Id);
+
 
 
 

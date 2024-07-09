@@ -21,8 +21,7 @@ public class Hashtag extends Base {
 
     private String name;
 
-//    @OneToMany(mappedBy = "hashtag")
-//    private List<DiaryHashtag> diaryHashtags;
+
 
     @Builder
     public  Hashtag(String name) {

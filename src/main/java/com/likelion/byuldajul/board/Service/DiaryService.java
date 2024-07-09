@@ -69,6 +69,42 @@ public class DiaryService {
 
     }
 
+//    public DiaryResponseDto getDiary(Long Id) {
+//        Diary diary = diaryRepository.findDiaryById(Id);
+////        List<Diary> diaryList = diaryRepository.findDiaryById(Id);
+//
+//        List<String> hashtags = hashtagRepository.findHashtagById(Id);
+//
+//        return DiaryResponseDto.builder().title(diary.getTitle())
+//                .template(diary.getTemplate())
+//                .mainText(diary.getMainText())
+//                .impression(diary.getImpression())
+//                .remark(diary.getRemark())
+//                .plan(diary.getPlan())
+//                .hashtagNames(hashtags)
+//                .build();
+
+//    }
+    public DiaryResponseDto getDiary(Long id) {
+        Diary diary = diaryRepository.findDiaryById(id);
+        List<String> hashtags = hashtagRepository.findHashtagsByDiaryId(id);
+
+        return DiaryResponseDto.builder()
+                .id(diary.getId())
+                .createdAt(diary.getCreatedAt())
+                .modifiedAt(diary.getModifiedAt())
+                .title(diary.getTitle())
+                .template(diary.getTemplate())
+                .mainText(diary.getMainText())
+                .impression(diary.getImpression())
+                .remark(diary.getRemark())
+                .plan(diary.getPlan())
+                .hashtagNames(hashtags)
+                .build();
+    }
+
+
+
 }
 
 
