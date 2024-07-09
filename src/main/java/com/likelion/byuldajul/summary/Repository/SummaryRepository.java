@@ -1,6 +1,6 @@
-package com.likelion.byuldajul.analysis.Repository;
+package com.likelion.byuldajul.summary.Repository;
 
-import com.likelion.byuldajul.analysis.Entity.Summary;
+import com.likelion.byuldajul.summary.Entity.Summary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

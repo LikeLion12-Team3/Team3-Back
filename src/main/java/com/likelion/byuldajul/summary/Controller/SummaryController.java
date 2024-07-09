@@ -1,11 +1,12 @@
-package com.likelion.byuldajul.analysis.Controller;
+package com.likelion.byuldajul.summary.Controller;
 
-import com.likelion.byuldajul.analysis.Service.GPTService;
+import com.likelion.byuldajul.summary.Service.GPTService;
 import com.likelion.byuldajul.board.Service.DiaryService;
 import com.likelion.byuldajul.user.userDetails.CustomUserDetails;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,11 +34,11 @@ public class SummaryController {
 
         try {
             // diaryService를 사용하여 요청된 날짜에 해당하는 일기 내용을 조회
-            String diaryContent = diaryService.getDiaryContentByDate(date);
+//            String diaryContent = diaryService.getDiaryContentByDate(date);
             // GPTService를 사용하여 요약을 생성
-            String summary = gptService.generateSummary(diaryContent, date);
+//            String summary = gptService.generateSummary(diaryContent, date);
 
-            return ResponseEntity.ok(summary); // 생성된 요약을 HTTP 200 OK 응답으로 반환
+            return ResponseEntity.ok(null); // 생성된 요약을 HTTP 200 OK 응답으로 반환
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("요청 처리 중 오류가 발생했습니다"); // 예외가 발생하면, 500 Internal Server Error 응답을 반환
         }
