@@ -20,6 +20,7 @@ import java.util.NoSuchElementException;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TokenService tokenService;
 
     //유저 생성(회원가입)
     @Transactional
@@ -88,7 +89,10 @@ public class UserService {
 
         log.info("[ User Service ] 사용자 탈퇴가 완료되었습니다 ---> {}", user.getEmail());
 
-        // refresh 토큰 삭제 로직은 로그아웃 기능 구현할 때 같이 할 예정
         userRepository.delete(user);
+
+        // 해당 유저의 refresh 토큰 삭제
+        log.info("이메일에 대한 토큰 삭제를 시도합니다: {}", email);
+        tokenService.deleteToken(email);
     }
 }
