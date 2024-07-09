@@ -61,6 +61,18 @@ public class UserController {
         userService.deleteUser(userDetails.getUsername());
         return ResponseEntity.ok(Map.of("message", "사용자가 성공적으로 삭제되었습니다"));
     }
+
+    //Swagger용 가짜 컨트롤러
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto) {
+        return null;
+    }
+
+    //Swagger용 가짜 컨트롤러
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout() {
+        return null;
+    }
 }
 
 
