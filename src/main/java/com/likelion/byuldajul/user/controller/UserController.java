@@ -21,7 +21,6 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
-@CrossOrigin(originPatterns = "*" ,value = "*")
 public class UserController {
 
     private final UserService userService;

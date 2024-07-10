@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/boards/diary")
-@CrossOrigin(originPatterns = "*" ,value = "*")
 public class SummaryController {
 
     private final GPTService gptService;
