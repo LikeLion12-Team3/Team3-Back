@@ -1,13 +1,15 @@
-package com.likelion.byuldajul.board.Controller;
+package com.likelion.byuldajul.diary.Controller;
 
-import com.likelion.byuldajul.board.Dto.reponse.DiaryListResponseDto;
-import com.likelion.byuldajul.board.Dto.reponse.DiaryResponseDto;
-import com.likelion.byuldajul.board.Dto.request.CreateDiaryRequestDto;
-import com.likelion.byuldajul.board.Dto.request.UpdateDiaryRequestDto;
+import com.likelion.byuldajul.diary.Dto.reponse.DiaryListResponseDto;
+import com.likelion.byuldajul.diary.Dto.reponse.DiaryResponseDto;
+import com.likelion.byuldajul.diary.Dto.request.CreateDiaryRequestDto;
+import com.likelion.byuldajul.diary.Dto.request.UpdateDiaryRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.likelion.byuldajul.board.Service.DiaryService;
+import com.likelion.byuldajul.diary.Service.DiaryService;
 
 import java.util.List;
 
@@ -21,18 +23,14 @@ public class DiaryController {
     private final DiaryService diaryService;
 
     @PostMapping()
-    public String createDiary(@RequestBody CreateDiaryRequestDto createDiaryRequestDto) {
+    public ResponseEntity<?> createDiary(@RequestBody CreateDiaryRequestDto createDiaryRequestDto) {
         log.info("제목: {}", createDiaryRequestDto.getTitle());
         log.info("템플릿: {}", createDiaryRequestDto.getTemplate());
         log.info("본문: {}",createDiaryRequestDto.getMainText());
         log.info("느낀점: {}", createDiaryRequestDto.getImpression());
-
-
         diaryService.save(createDiaryRequestDto);
 
-
-
-        return "일기 생성";
+        return new ResponseEntity(HttpStatus.CREATED, );
     }
 
     @GetMapping()
