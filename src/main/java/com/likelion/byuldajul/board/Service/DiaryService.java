@@ -101,11 +101,19 @@ public class DiaryService {
                 updateDiaryRequestDto.getMainText(),
                 updateDiaryRequestDto.getImpression(),
                 updateDiaryRequestDto.getRemark(),
-                updateDiaryRequestDto.getPlan());
+                 updateDiaryRequestDto.getPlan());
 
         diaryHashtagRepository.deleteAllByDiary_Id(id);
 
         saveHashtag(diary, updateDiaryRequestDto.getDiaryHashtags());
+    }
+
+    @Transactional
+    public void deleteDiary(Long Id)  {
+
+        diaryHashtagRepository.deleteAllByDiary_Id(Id);
+
+        diaryRepository.deleteById(Id);
     }
 }
 

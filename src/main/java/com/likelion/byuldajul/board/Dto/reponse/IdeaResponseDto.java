@@ -1,0 +1,36 @@
+package com.likelion.byuldajul.board.Dto.reponse;
+
+import com.likelion.byuldajul.board.Entity.Idea;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class IdeaResponseDto {
+
+    private Long id;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime modifiedAt;
+
+    private String title;
+
+    private String mainText;
+
+    public static IdeaResponseDto from(Idea idea) {
+        return IdeaResponseDto.builder()
+                .id(idea.getId())
+                .createdAt(idea.getCreatedAt())
+                .modifiedAt(idea.getModifiedAt())
+                .title(idea.getTitle())
+                .mainText(idea.getMainText())
+                .build();
+    }
+}

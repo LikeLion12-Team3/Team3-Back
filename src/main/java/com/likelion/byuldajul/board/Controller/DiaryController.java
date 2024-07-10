@@ -40,7 +40,6 @@ public class DiaryController {
         return diaryService.getDiaryList(hashtag);
     }
 
-
     @GetMapping("/{id}")
     public DiaryResponseDto getDiary(@PathVariable Long id) {
         return diaryService.getDiary(id);
@@ -50,5 +49,12 @@ public class DiaryController {
     public void updateDiary(@PathVariable Long id, @RequestBody UpdateDiaryRequestDto updateDiaryRequestDto) {
         diaryService.updateDiary(id, updateDiaryRequestDto);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteDiary(@PathVariable Long id) {
+        diaryService.deleteDiary(id);
+    }
+
+
 
 }
