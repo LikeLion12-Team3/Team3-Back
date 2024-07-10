@@ -1,5 +1,6 @@
 package com.likelion.byuldajul.board.Entity;
 
+import com.likelion.byuldajul.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -43,8 +44,17 @@ public class Diary extends Base{
         this.plan = plan;
     }
 
+    public void update(String title, String template, String mainText, String impression, String remark, String plan){
+        this.title = title;
+        this.template = template;
+        this.mainText = mainText;
+        this.impression = impression;
+        this.remark = remark;
+        this.plan = plan;
+    }
 
-
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "email", referencedColumnName = "email")
+    private User user;
 
 }
