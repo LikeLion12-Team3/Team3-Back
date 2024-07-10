@@ -34,9 +34,10 @@ public class DiaryService {
     public DiaryResponseDto save(CreateDiaryRequestDto createDiaryRequestDto) {
 
         Diary diary = diaryRepository.save(createDiaryRequestDto.toEntity());
+        List<String> hashtags = hashtagRepository.findHashtagsByDiaryId(diary.getId());
         saveHashtag(diary, createDiaryRequestDto.getDiaryHashtags());
 
-        return DiaryResponseDto.of(diary);
+        return DiaryResponseDto.of(diary, hashtags);
     }
 
     private void saveHashtag(Diary diary, List<String> hashtagList) {

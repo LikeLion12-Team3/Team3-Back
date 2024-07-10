@@ -35,7 +35,7 @@ public class DiaryResponseDto {
 
     private List<String> hashtagNames;
 
-    public static DiaryResponseDto of(Diary diary) {
+    public static DiaryResponseDto of(Diary diary, List<String> hashtagNames) {
         return DiaryResponseDto.builder()
                 .id(diary.getId())
                 .createdAt(diary.getCreatedAt())
@@ -46,6 +46,7 @@ public class DiaryResponseDto {
                 .impression(diary.getImpression())
                 .remark(diary.getRemark())
                 .plan(diary.getPlan())
+                .hashtagNames(hashtagNames)
                 .build();
     }
 

@@ -28,9 +28,9 @@ public class DiaryController {
         log.info("템플릿: {}", createDiaryRequestDto.getTemplate());
         log.info("본문: {}",createDiaryRequestDto.getMainText());
         log.info("느낀점: {}", createDiaryRequestDto.getImpression());
-        diaryService.save(createDiaryRequestDto);
+        DiaryResponseDto responseDto = diaryService.save(createDiaryRequestDto);
 
-        return new ResponseEntity(HttpStatus.CREATED, );
+        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
     @GetMapping()
