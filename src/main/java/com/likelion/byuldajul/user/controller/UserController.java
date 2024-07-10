@@ -3,6 +3,7 @@ package com.likelion.byuldajul.user.controller;
 import com.likelion.byuldajul.user.dto.*;
 import com.likelion.byuldajul.user.service.UserService;
 import com.likelion.byuldajul.user.userDetails.CustomUserDetails;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,6 +61,15 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
         userService.deleteUser(userDetails.getUsername());
         return ResponseEntity.ok(Map.of("message", "사용자가 성공적으로 삭제되었습니다"));
+    }
+
+    @PostMapping("/pw")
+    @Operation(summary = "비밀번호 일치 확인", description = "비밀번호가 일치하는지 확인합니다.")
+    public ResponseEntity<?> isPasswordCorrect(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                               @RequestBody PasswordRequestDto passwordRequestDto) {
+        if (userService.isPasswordCorrect(userDetails.getUsername(), passwordRequestDto.getPassword())) {
+            return ResponseEntity.ok("패스워드가 일치합니다.");
+        } else return new ResponseEntity<>("패스워드가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
     }
 
     //Swagger용 가짜 컨트롤러

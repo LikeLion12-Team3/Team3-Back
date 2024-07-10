@@ -1,9 +1,9 @@
-package com.likelion.byuldajul.board.Dto.request;
+package com.likelion.byuldajul.diary.Dto.request;
 
-import com.likelion.byuldajul.board.Entity.Diary;
-import com.likelion.byuldajul.board.Entity.DiaryHashtag;
+import com.likelion.byuldajul.diary.Entity.Diary;
+import com.likelion.byuldajul.diary.Entity.Hashtag;
+import com.likelion.byuldajul.user.entity.User;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,7 +30,7 @@ public class CreateDiaryRequestDto {
 
     private List<String> diaryHashtags = new ArrayList<>();
 
-    public Diary toEntity(){
+    public Diary toEntity(User user){
         return Diary.builder()
                 .title(title)
                 .template(template)
@@ -38,6 +38,7 @@ public class CreateDiaryRequestDto {
                 .impression(impression)
                 .remark(remark)
                 .plan(plan)
+                .user(user)
                 .build();
     }
 

@@ -1,12 +1,13 @@
 package com.likelion.byuldajul.summary.Entity;
 
 
+import com.likelion.byuldajul.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
@@ -21,17 +22,12 @@ public class Summary {
     private Long id;
 
     @Column
-    private LocalDateTime date;
+    private LocalDate date;
 
     @Column (columnDefinition = "TEXT")
     private String content;
 
-    @Column
     private String email;
 
-    public Summary(String content, LocalDateTime date) {
-        this.content = content;
-        this.date = date;
-    }
 
 }

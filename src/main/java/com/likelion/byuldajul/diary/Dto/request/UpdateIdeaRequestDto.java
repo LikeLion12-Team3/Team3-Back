@@ -1,4 +1,4 @@
-package com.likelion.byuldajul.board.Dto.request;
+package com.likelion.byuldajul.diary.Dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class UpdateIdeaRequestDto {
-
-    public Long id;
 
     public String title;
 

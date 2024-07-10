@@ -1,32 +1,25 @@
-package com.likelion.byuldajul.board.Entity;
+package com.likelion.byuldajul.diary.Entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import java.util.List;
+import lombok.*;
 
 
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Entity
-@Table(name = "hashtags")
+@Table(name = "hashtag")
 public class Hashtag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "hashtag_id")
     private Long id;
 
     private String name;
 
-
-
-    @Builder
-    public  Hashtag(String name) {
-        this.name = name;
-    }
+    @ManyToOne
+    @JoinColumn(name = "diary_id")
+    private Diary diary;
 
     public void updateHashtag(String name) {
         this.name = name;

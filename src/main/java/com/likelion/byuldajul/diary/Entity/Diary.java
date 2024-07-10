@@ -1,26 +1,23 @@
-package com.likelion.byuldajul.board.Entity;
+package com.likelion.byuldajul.diary.Entity;
 
 import com.likelion.byuldajul.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "diarys")
+@Table(name = "diary")
 public class Diary extends Base{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "diary_id")
-    private Long Id;
+    private Long id;
 
     private String title;
 
@@ -34,15 +31,12 @@ public class Diary extends Base{
 
     private String plan;
 
-    @Builder
-    public Diary(String title, String template, String mainText, String impression, String remark, String plan){
-        this.title = title;
-        this.template = template;
-        this.mainText = mainText;
-        this.impression = impression;
-        this.remark = remark;
-        this.plan = plan;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "email", referencedColumnName = "email")
+    private User user;
+
+    @OneToMany(mappedBy = "diary", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Hashtag> hashTags;
 
     public void update(String title, String template, String mainText, String impression, String remark, String plan){
         this.title = title;
@@ -53,8 +47,7 @@ public class Diary extends Base{
         this.plan = plan;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "email", referencedColumnName = "email")
-    private User user;
-
+    public void setHashTags(List<Hashtag> hashTags) {
+        this.hashTags = hashTags;
+    }
 }
