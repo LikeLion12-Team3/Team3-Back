@@ -1,6 +1,7 @@
 package com.likelion.byuldajul.summary.Entity;
 
 
+import com.likelion.byuldajul.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,13 +27,7 @@ public class Summary {
     @Column (columnDefinition = "TEXT")
     private String content;
 
-    @Column
     private String email;
 
-    public Summary(String email, String content, LocalDate date) {
-        this.email = email;
-        this.content = content;
-        this.date = date;
-    }
 
 }
