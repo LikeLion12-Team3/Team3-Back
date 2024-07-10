@@ -26,7 +26,7 @@ public class DiaryListResponseDto {
                 .Id(diary.getId())
                 .createdAt(diary.getCreatedAt())
                 .title(diary.getTitle())
-                .mainText(diary.getMainText().substring(0, 10) + "...")
+                .mainText(diary.getMainText().length() <= 10 ? diary.getMainText() : diary.getMainText().substring(0, 10) + "..." )
                 .build();
 
     }

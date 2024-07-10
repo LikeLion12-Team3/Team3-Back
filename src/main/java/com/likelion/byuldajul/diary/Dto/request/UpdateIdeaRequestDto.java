@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class UpdateIdeaRequestDto {
 
-    public Long id;
-
     public String title;
 
     public String mainText;

@@ -1,10 +1,11 @@
 package com.likelion.byuldajul.commit.service;
 
-import com.likelion.byuldajul.diary.Repository.DiaryHashtagRepository;
 import com.likelion.byuldajul.commit.dto.CommitDetailsResponseDto;
 import com.likelion.byuldajul.commit.dto.CommitResponseDto;
 import com.likelion.byuldajul.commit.entity.Commit;
 import com.likelion.byuldajul.commit.repository.CommitRepository;
+import com.likelion.byuldajul.diary.Entity.Hashtag;
+import com.likelion.byuldajul.diary.Repository.DiaryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 public class CommitService {
 
     private final CommitRepository commitRepository;
-    private final DiaryHashtagRepository diaryHashtagRepository;
+    private final DiaryRepository diaryRepository;
 
     // 특정 연도와 월에 해당하는 커밋 개수를 조회하는 메서드
     @Transactional(readOnly = true)
@@ -26,6 +27,10 @@ public class CommitService {
 
         // 주어진 year과 month에 해당하는 커밋들 조회해서 List에 집어넣음
         List<Commit> commits = commitRepository.findByDateYearAndMonthAndUserEmail(year, month, email);
+
+        if (commits.isEmpty()) {
+            return null;
+        }
 
         // 커밋들을 일(day)별로 그룹화하고, 각 일에 해당하는 커밋 개수를 카운트하여 리스트로 반환
         return commits.stream()
@@ -55,9 +60,8 @@ public class CommitService {
         return commits.stream()
                 .map(commit -> {
                     // 다이어리 ID를 통해 다이어리 해시태그들을 조회
-                    List<String> hashtags = diaryHashtagRepository.findByDiaryId(commit.getDiary().getId()).stream()
-                            .map(diaryHashtag -> diaryHashtag.getHashtag().getName())
-                            .toList();
+                    List<String> hashtags = diaryRepository.findById(commit.getDiary().getId()).get().getHashTags()
+                            .stream().map(Hashtag::getName).toList();
 
                     // 커밋의 상세 정보를 CommitDetailsResponseDto 객체로 변환
                     return CommitDetailsResponseDto.builder()

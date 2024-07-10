@@ -19,4 +19,6 @@ public interface CommitRepository extends JpaRepository<Commit, Long> {
     // 특정한 날에 특정 유저가 올린 커밋을 조회
     @Query("SELECT c FROM Commit c WHERE c.date = :date AND c.user.email = :email")
     List<Commit> findByDateAndUserEmail(@Param("date") LocalDate date, @Param("email") String email);
+
+    void deleteByDiary_Id(Long id);
 }

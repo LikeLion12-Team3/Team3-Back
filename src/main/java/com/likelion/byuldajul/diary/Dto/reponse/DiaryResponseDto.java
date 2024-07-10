@@ -1,6 +1,7 @@
 package com.likelion.byuldajul.diary.Dto.reponse;
 
 import com.likelion.byuldajul.diary.Entity.Diary;
+import com.likelion.byuldajul.diary.Entity.Hashtag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,7 +36,7 @@ public class DiaryResponseDto {
 
     private List<String> hashtagNames;
 
-    public static DiaryResponseDto of(Diary diary, List<String> hashtagNames) {
+    public static DiaryResponseDto of(Diary diary) {
         return DiaryResponseDto.builder()
                 .id(diary.getId())
                 .createdAt(diary.getCreatedAt())
@@ -46,7 +47,7 @@ public class DiaryResponseDto {
                 .impression(diary.getImpression())
                 .remark(diary.getRemark())
                 .plan(diary.getPlan())
-                .hashtagNames(hashtagNames)
+                .hashtagNames(diary.getHashTags().stream().map(Hashtag::getName).toList())
                 .build();
     }
 

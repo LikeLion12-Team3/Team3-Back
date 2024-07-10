@@ -11,14 +11,8 @@ import java.util.Optional;
 
 @Repository
 public interface HashtagRepository extends JpaRepository<Hashtag, Long> {
-    Optional<Hashtag> findByName(String name);
 
-//    @Query(value = "select Hashtag.name" +
-//            " from DiaryHashtag dh, Hashtag h" +
-//            " where dh.id = h.id and dh.diary.Id = :Id")
-//    List<String> findHashtagById(Long id);
+    List<Hashtag> findAllByNameContainingAndDiary_User_Email(String query, String email);
 
-    @Query(value = "select h.name from DiaryHashtag dh join dh.hashtag h where dh.diary.Id = :id")
-    List<String> findHashtagsByDiaryId(@Param("id") Long id);
-
+    void deleteAllByDiary_Id(Long id);
 }

@@ -12,7 +12,6 @@ import java.util.List;
 @Getter
 public class UpdateDiaryRequestDto {
 
-    public Long id;
 
     public String title;
 

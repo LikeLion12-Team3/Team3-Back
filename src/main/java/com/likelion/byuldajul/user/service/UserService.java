@@ -95,4 +95,12 @@ public class UserService {
         log.info("이메일에 대한 토큰 삭제를 시도합니다: {}", email);
         tokenService.deleteToken(email);
     }
+
+    @Transactional(readOnly = true)
+    public boolean isPasswordCorrect(String email, String passowrd) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("요청한 사용자를 찾을 수 없습니다"));
+
+        return passwordEncoder.matches(passowrd, user.getPassword());
+    }
 }
