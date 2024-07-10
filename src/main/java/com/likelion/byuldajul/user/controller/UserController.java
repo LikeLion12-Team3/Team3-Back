@@ -70,7 +70,7 @@ public class UserController {
     }
 
     //Swagger용 가짜 컨트롤러
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     public ResponseEntity<?> logout() {
         return null;
     }
