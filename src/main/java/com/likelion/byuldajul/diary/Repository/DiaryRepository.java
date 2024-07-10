@@ -1,7 +1,7 @@
-package com.likelion.byuldajul.board.Repository;
+package com.likelion.byuldajul.diary.Repository;
 
 
-import com.likelion.byuldajul.board.Entity.Diary;
+import com.likelion.byuldajul.diary.Entity.Diary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,6 +19,7 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     List<Diary> findByHashTag(String hashtag);
     Diary findDiaryById(Long Id);
 
+    List<Diary> findAllByUser_Email(String email);
 
     void deleteById(Long Id);
 }

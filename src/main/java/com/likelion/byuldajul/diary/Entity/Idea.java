@@ -1,4 +1,4 @@
-package com.likelion.byuldajul.board.Entity;
+package com.likelion.byuldajul.diary.Entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;

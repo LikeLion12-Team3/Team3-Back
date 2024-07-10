@@ -1,6 +1,8 @@
 package com.likelion.byuldajul.summary.Service;
 
 import com.likelion.byuldajul.board.Service.DiaryService;
+import com.likelion.byuldajul.user.userDetails.CustomUserDetails;
+import com.likelion.byuldajul.diary.Service.DiaryService;
 import com.likelion.byuldajul.summary.Entity.Summary;
 import com.likelion.byuldajul.summary.Repository.SummaryRepository;
 

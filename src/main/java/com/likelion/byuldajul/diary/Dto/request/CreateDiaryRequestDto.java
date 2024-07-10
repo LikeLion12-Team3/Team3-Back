@@ -1,9 +1,7 @@
-package com.likelion.byuldajul.board.Dto.request;
+package com.likelion.byuldajul.diary.Dto.request;
 
-import com.likelion.byuldajul.board.Entity.Diary;
-import com.likelion.byuldajul.board.Entity.DiaryHashtag;
+import com.likelion.byuldajul.diary.Entity.Diary;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

@@ -1,7 +1,7 @@
 package com.likelion.byuldajul.summary.Controller;
 
 import com.likelion.byuldajul.summary.Service.GPTService;
-import com.likelion.byuldajul.board.Service.DiaryService;
+import com.likelion.byuldajul.diary.Service.DiaryService;
 import com.likelion.byuldajul.user.userDetails.CustomUserDetails;
 
 import lombok.RequiredArgsConstructor;

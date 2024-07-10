@@ -1,0 +1,64 @@
+package com.likelion.byuldajul.diary.Controller;
+
+import com.likelion.byuldajul.diary.Dto.reponse.DiaryListResponseDto;
+import com.likelion.byuldajul.diary.Dto.reponse.DiaryResponseDto;
+import com.likelion.byuldajul.diary.Dto.request.CreateDiaryRequestDto;
+import com.likelion.byuldajul.diary.Dto.request.UpdateDiaryRequestDto;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import com.likelion.byuldajul.diary.Service.DiaryService;
+
+import java.util.List;
+
+
+@Slf4j
+@RestController
+@RequestMapping("/diary")
+@RequiredArgsConstructor
+public class DiaryController {
+
+    private final DiaryService diaryService;
+
+    @Operation(summary = "새 일기 생성", description = "새 일기를 생성합니다.")
+    @PostMapping("")
+    public ResponseEntity<?> createDiary(@RequestBody CreateDiaryRequestDto createDiaryRequestDto) {
+        log.info("제목: {}", createDiaryRequestDto.getTitle());
+        log.info("템플릿: {}", createDiaryRequestDto.getTemplate());
+        log.info("본문: {}",createDiaryRequestDto.getMainText());
+        log.info("느낀점: {}", createDiaryRequestDto.getImpression());
+        DiaryResponseDto responseDto = diaryService.save(createDiaryRequestDto);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "일기 조회 (해시태그)", description = "해시태그로 일기를 조회합니다. 내용은 첫 10글자만 보입니다.")
+    @GetMapping("")
+    public ResponseEntity<List<DiaryListResponseDto>> getDiaryList(@RequestParam String hashtag) {
+        return ResponseEntity.ok(diaryService.getDiaryList(hashtag));
+    }
+
+    @Operation(summary = "일기 조회 (ID)", description = "일기 단건 조회 (ID)")
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getDiary(@PathVariable Long id) {
+        return ResponseEntity.ok(diaryService.getDiary(id));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> updateDiary(@PathVariable Long id, @RequestBody UpdateDiaryRequestDto updateDiaryRequestDto) {
+        diaryService.updateDiary(id, updateDiaryRequestDto);
+        return ResponseEntity.ok("수정 완료");
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteDiary(@PathVariable Long id) {
+        diaryService.deleteDiary(id);
+        return ResponseEntity.ok("삭제 완료");
+    }
+
+
+
+}

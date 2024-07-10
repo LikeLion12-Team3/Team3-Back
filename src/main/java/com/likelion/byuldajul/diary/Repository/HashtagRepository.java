@@ -1,6 +1,6 @@
-package com.likelion.byuldajul.board.Repository;
+package com.likelion.byuldajul.diary.Repository;
 
-import com.likelion.byuldajul.board.Entity.Hashtag;
+import com.likelion.byuldajul.diary.Entity.Hashtag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

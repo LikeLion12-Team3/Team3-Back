@@ -1,14 +1,12 @@
-package com.likelion.byuldajul.board.Controller;
+package com.likelion.byuldajul.diary.Controller;
 
-import com.likelion.byuldajul.board.Dto.reponse.IdeaResponseDto;
-import com.likelion.byuldajul.board.Dto.request.CreateIdeaRequestDto;
-import com.likelion.byuldajul.board.Dto.request.UpdateIdeaRequestDto;
-import com.likelion.byuldajul.board.Entity.Idea;
-import com.likelion.byuldajul.board.Service.IdeaService;
-import jakarta.persistence.Id;
+import com.likelion.byuldajul.diary.Dto.reponse.IdeaResponseDto;
+import com.likelion.byuldajul.diary.Dto.request.CreateIdeaRequestDto;
+import com.likelion.byuldajul.diary.Dto.request.UpdateIdeaRequestDto;
+import com.likelion.byuldajul.diary.Entity.Idea;
+import com.likelion.byuldajul.diary.Service.IdeaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.DialectOverride;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +25,6 @@ public class IdeaController {
         log.info("아이디어내용: {}", createIdeaRequestDto.getMainText());
 
         ideaService.saveIdea(createIdeaRequestDto);
-
         return "아이디어 생성";
     }
 

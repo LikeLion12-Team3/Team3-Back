@@ -1,16 +1,16 @@
-package com.likelion.byuldajul.board.Service;
+package com.likelion.byuldajul.diary.Service;
 
 
-import com.likelion.byuldajul.board.Dto.reponse.DiaryListResponseDto;
-import com.likelion.byuldajul.board.Dto.reponse.DiaryResponseDto;
-import com.likelion.byuldajul.board.Dto.request.CreateDiaryRequestDto;
-import com.likelion.byuldajul.board.Dto.request.UpdateDiaryRequestDto;
-import com.likelion.byuldajul.board.Entity.Diary;
-import com.likelion.byuldajul.board.Entity.DiaryHashtag;
-import com.likelion.byuldajul.board.Entity.Hashtag;
-import com.likelion.byuldajul.board.Repository.DiaryHashtagRepository;
-import com.likelion.byuldajul.board.Repository.DiaryRepository;
-import com.likelion.byuldajul.board.Repository.HashtagRepository;
+import com.likelion.byuldajul.diary.Dto.reponse.DiaryListResponseDto;
+import com.likelion.byuldajul.diary.Dto.reponse.DiaryResponseDto;
+import com.likelion.byuldajul.diary.Dto.request.CreateDiaryRequestDto;
+import com.likelion.byuldajul.diary.Dto.request.UpdateDiaryRequestDto;
+import com.likelion.byuldajul.diary.Entity.Diary;
+import com.likelion.byuldajul.diary.Entity.DiaryHashtag;
+import com.likelion.byuldajul.diary.Entity.Hashtag;
+import com.likelion.byuldajul.diary.Repository.DiaryHashtagRepository;
+import com.likelion.byuldajul.diary.Repository.DiaryRepository;
+import com.likelion.byuldajul.diary.Repository.HashtagRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,14 +31,13 @@ public class DiaryService {
     private final DiaryHashtagRepository diaryHashtagRepository;
 
     @Transactional
-    public Long save(CreateDiaryRequestDto createDiaryRequestDto) {
-
+    public DiaryResponseDto save(CreateDiaryRequestDto createDiaryRequestDto) {
 
         Diary diary = diaryRepository.save(createDiaryRequestDto.toEntity());
-
+        List<String> hashtags = hashtagRepository.findHashtagsByDiaryId(diary.getId());
         saveHashtag(diary, createDiaryRequestDto.getDiaryHashtags());
 
-        return diary.getId();
+        return DiaryResponseDto.of(diary, hashtags);
     }
 
     private void saveHashtag(Diary diary, List<String> hashtagList) {
@@ -67,10 +66,9 @@ public class DiaryService {
     public List<DiaryListResponseDto> getDiaryList(String hashtag) {
         List<Diary> diaryList = diaryRepository.findByHashTag(hashtag);
 
-        List<DiaryListResponseDto> responseDtoList = diaryList.stream()
+        return diaryList.stream()
                 .map(DiaryListResponseDto::from)
                 .collect(Collectors.toList());
-        return responseDtoList;
 
     }
 
@@ -114,6 +112,16 @@ public class DiaryService {
         diaryHashtagRepository.deleteAllByDiary_Id(Id);
 
         diaryRepository.deleteById(Id);
+    }
+
+
+    private void updateDiarySummary(String email) {
+        List<Diary> diaries = diaryRepository.findAllByUser_Email(email);
+        List<String> contents = diaries.stream()
+                .map(Diary::getMainText)
+                .toList();
+
+        //TODO : GPT 요약 보내기
     }
 }
 

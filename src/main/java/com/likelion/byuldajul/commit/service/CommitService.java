@@ -1,8 +1,7 @@
 package com.likelion.byuldajul.commit.service;
 
-import com.likelion.byuldajul.board.Repository.DiaryHashtagRepository;
+import com.likelion.byuldajul.diary.Repository.DiaryHashtagRepository;
 import com.likelion.byuldajul.commit.dto.CommitDetailsResponseDto;
-import com.likelion.byuldajul.commit.dto.CommitRequestDto;
 import com.likelion.byuldajul.commit.dto.CommitResponseDto;
 import com.likelion.byuldajul.commit.entity.Commit;
 import com.likelion.byuldajul.commit.repository.CommitRepository;
