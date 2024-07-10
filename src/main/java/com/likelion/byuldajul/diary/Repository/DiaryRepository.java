@@ -19,6 +19,7 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     List<Diary> findByHashTag(String hashtag);
     Diary findDiaryById(Long Id);
 
+    List<Diary> findAllByUser_Email(String email);
 
     void deleteById(Long Id);
 }

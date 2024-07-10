@@ -113,6 +113,16 @@ public class DiaryService {
 
         diaryRepository.deleteById(Id);
     }
+
+
+    private void updateDiarySummary(String email) {
+        List<Diary> diaries = diaryRepository.findAllByUser_Email(email);
+        List<String> contents = diaries.stream()
+                .map(Diary::getMainText)
+                .toList();
+
+        //TODO : GPT 요약 보내기
+    }
 }
 
 
