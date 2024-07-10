@@ -1,19 +1,24 @@
 package com.likelion.byuldajul.config;
 
+import com.likelion.byuldajul.exception.CustomAccessDeniedHandler;
+import com.likelion.byuldajul.exception.CustomAuthenticationEntryPoint;
 import com.likelion.byuldajul.user.filter.CustomLoginFilter;
+import com.likelion.byuldajul.user.filter.CustomLogoutHandler;
 import com.likelion.byuldajul.user.filter.JwtFilter;
 import com.likelion.byuldajul.user.repository.UserRepository;
+import com.likelion.byuldajul.user.service.TokenService;
 import com.likelion.byuldajul.user.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -25,6 +30,9 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
+    private final TokenService tokenService;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean //암호화 메서드
     public BCryptPasswordEncoder bCryptPasswordEncoder() { return new BCryptPasswordEncoder(); }
@@ -38,8 +46,12 @@ public class SecurityConfig {
     private final String[] allowedUrls = {
             "/users/login", //로그인은 인증이 필요하지 않음
             "/users/signup", //회원가입은 인증이 필요하지 않음
-            "/auth/reissue" //토큰 재발급은 인증이 필요하지 않음
+            "/auth/reissue", //토큰 재발급은 인증이 필요하지 않음
+            "api/usage",  //swagger 관련 URL
+            "/swagger-ui/**",
+            "/v3/api-docs/**"
     };
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -74,6 +86,13 @@ public class SecurityConfig {
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+        // Custom AuthenticationEntryPoint와 AccessDeniedHandler 등록
+        http
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler)
+                );
+
         // Login Filter
         CustomLoginFilter loginFilter = new CustomLoginFilter(
                 authenticationManager(authenticationConfiguration), jwtUtil);
@@ -86,6 +105,21 @@ public class SecurityConfig {
         // login filter 전에 Auth Filter 등록
         http
                 .addFilterBefore(new JwtFilter(jwtUtil, userRepository), CustomLoginFilter.class);
+
+
+        // Logout Filter 추가
+        http
+                .logout(logout -> logout
+                        .logoutUrl("/users/logout")
+                        .addLogoutHandler(new CustomLogoutHandler(tokenService, jwtUtil))
+                        //.logoutSuccessUrl("/users/login") // 로그아웃 성공 시 리다이렉트할 URL 설정
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            response.setStatus(HttpStatus.OK.value());
+                            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                            response.setCharacterEncoding("UTF-8");
+                            response.getWriter().write("{\"message\":\"로그아웃 성공\"}");
+                        })
+                );
 
         return http.build();
     }

@@ -15,6 +15,7 @@ import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -33,12 +35,14 @@ public class JwtUtil {
     private final SecretKey secretKey;
     private final Long accessExpMs;
     private final Long refreshExpMs;
+    private final RedisTemplate<String, Object> redisTemplate;
     private final TokenRepository tokenRepository;
 
     public JwtUtil(
             @Value("${spring.jwt.secret}") String secret,
             @Value("${spring.jwt.token.access-expiration-time}") Long access,
             @Value("${spring.jwt.token.refresh-expiration-time}") Long refresh,
+            RedisTemplate<String, Object> redisTemplate,
             TokenRepository tokenRepo
     ) {
 
@@ -46,7 +50,14 @@ public class JwtUtil {
                 Jwts.SIG.HS256.key().build().getAlgorithm());
         accessExpMs = access;
         refreshExpMs = refresh;
+        this.redisTemplate = redisTemplate;
         tokenRepository = tokenRepo;
+    }
+
+
+    //Refresh 토큰의 만료 시간을 반환하는 메서드
+    public long getRefreshExp(String token) {
+        return refreshExpMs;
     }
 
     // JWT 토큰을 입력으로 받아 토큰의 subject 로부터 사용자 Email 추출하는 메서드
@@ -107,10 +118,11 @@ public class JwtUtil {
         String refreshToken = tokenProvider(customUserDetails, expiration);
 
         // DB에 Refresh Token 저장
-        tokenRepository.save(Token.builder()
-                .email(customUserDetails.getUsername())
-                .refreshToken(refreshToken)
-                .build()
+        redisTemplate.opsForValue().set(
+                customUserDetails.getUsername() + ":refresh", //키 예시 user1@example.com:refresh, 토큰의 목적에 맞게 쉽게 구분하기 위함
+                refreshToken,
+                refreshExpMs,
+                TimeUnit.MILLISECONDS
         );
 
 
@@ -119,10 +131,11 @@ public class JwtUtil {
 
     // 제공된 리프레시 토큰을 기반으로 JwtDto 쌍을 다시 발급
     public JwtDto reissueToken(String refreshToken) throws SignatureException {
+        String email = getEmail(refreshToken);
 
         // refreshToken 에서 user 정보를 가져와서 새로운 토큰을 발급 (발급 시간, 유효 시간(reset)만 새로 적용)
         CustomUserDetails userDetails = new CustomUserDetails(
-                getEmail(refreshToken),
+                email,
                 null
         );
         log.info("[ JwtUtil ] 새로운 토큰을 재발급 합니다.");
@@ -148,6 +161,7 @@ public class JwtUtil {
 
         return tokenFromHeader.split(" ")[1]; //Bearer 와 분리
     }
+
 
     // 리프레시 토큰의 유효성을 검사
     public void isRefreshToken(String refreshToken) {

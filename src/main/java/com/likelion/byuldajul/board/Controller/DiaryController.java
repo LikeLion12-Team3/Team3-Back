@@ -16,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/diary")
 @RequiredArgsConstructor
+@CrossOrigin(originPatterns = "*" ,value = "*")
 public class DiaryController {
 
     private final DiaryService diaryService;

@@ -21,6 +21,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
+@CrossOrigin(originPatterns = "*" ,value = "*")
 public class UserController {
 
     private final UserService userService;
@@ -61,4 +62,18 @@ public class UserController {
         userService.deleteUser(userDetails.getUsername());
         return ResponseEntity.ok(Map.of("message", "사용자가 성공적으로 삭제되었습니다"));
     }
+
+    //Swagger용 가짜 컨트롤러
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto) {
+        return null;
+    }
+
+    //Swagger용 가짜 컨트롤러
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout() {
+        return null;
+    }
 }
+
+
