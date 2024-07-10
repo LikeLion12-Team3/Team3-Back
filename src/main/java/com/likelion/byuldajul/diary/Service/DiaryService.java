@@ -42,7 +42,7 @@ public class DiaryService {
         Diary diary = diaryRepository.save(createDiaryRequestDto.toEntity(user, hashtags));
 
         LocalDate localDate = LocalDate.now();
-//        updateDiarySummary(email, localDate);
+        updateDiarySummary(email, localDate);
 
         return DiaryResponseDto.of(diary);
     }
