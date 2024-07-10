@@ -108,6 +108,7 @@ public class DiaryService {
         if (!diary.getUser().getEmail().equals(email)) {
             throw new SecurityException("권한이 없습니다.");
         }
+        hashtagRepository.deleteAllByDiary_Id(diary.getId());
         diaryRepository.deleteById(id);
 
         LocalDate localDate = LocalDate.now();
