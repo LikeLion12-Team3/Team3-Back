@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class CommitDetailsResponseDto {
 
     private Long boardId;
 
-    private LocalDateTime date;
+    private LocalDate date;
 
     private String title;
 
@@ -26,7 +27,7 @@ public class CommitDetailsResponseDto {
     private List<String> hashtags;
 
     @Builder
-    public CommitDetailsResponseDto(Long id, Long boardId, LocalDateTime date, String title, String mainText, String impression, List<String> hashtags) {
+    public CommitDetailsResponseDto(Long id, Long boardId, LocalDate date, String title, String mainText, String impression, List<String> hashtags) {
         this.id = id;
         this.boardId = boardId;
         this.date = date;

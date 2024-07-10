@@ -1,12 +1,14 @@
 package com.likelion.byuldajul.commit.entity;
 
 import com.likelion.byuldajul.board.Entity.Diary;
+import com.likelion.byuldajul.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,7 +22,7 @@ public class Commit {
     private Long id;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;
+    private LocalDate date;
 
     @Column(nullable = false)
     private String title;
@@ -29,11 +31,17 @@ public class Commit {
     @JoinColumn(name = "diary_id")
     private Diary diary;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "email", referencedColumnName = "email")
+    private User user;
+
+
     @Builder
-    public Commit(Long id, LocalDateTime createdAt, String title, Diary diary) {
+    public Commit(Long id, LocalDate date, String title, Diary diary, User user) {
         this.id = id;
-        this.createdAt = createdAt;
+        this.date = date;
         this.title = title;
         this.diary = diary;
+        this.user = user;
     }
 }

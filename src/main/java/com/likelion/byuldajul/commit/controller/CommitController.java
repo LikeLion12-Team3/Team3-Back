@@ -25,14 +25,14 @@ public class CommitController {
     @GetMapping
     public ResponseEntity<List<CommitResponseDto>> getCommits(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                               @RequestBody CommitRequestDto requestDto) {
-        List<CommitResponseDto> commits = commitService.getCommitsByYearAndMonth(requestDto);
+        List<CommitResponseDto> commits = commitService.getCommitsByYearAndMonth(requestDto, userDetails.getUsername());
         return ResponseEntity.ok(commits);
     }
 
     @GetMapping("/by-day")
     public ResponseEntity<List<CommitDetailsResponseDto>> getCommitsByDay(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                           @RequestParam("date") LocalDate date) {
-        List<CommitDetailsResponseDto> commitDetails = commitService.getCommitsByDay(date);
+        List<CommitDetailsResponseDto> commitDetails = commitService.getCommitsByDay(date, userDetails.getUsername());
         return ResponseEntity.ok(commitDetails);
     }
 }

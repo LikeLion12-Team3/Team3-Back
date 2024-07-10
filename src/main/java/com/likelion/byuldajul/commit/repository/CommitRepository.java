@@ -12,12 +12,11 @@ import java.util.List;
 @Repository
 public interface CommitRepository extends JpaRepository<Commit, Long> {
 
-    //ex) findByCreatedAtYearAndMonth(2024, 6)
-    //      -> SELECT * FROM commits WHERE YEAR(createdAt) = 2024 AND MONTH(createdAt) = 6; 쿼리문이 날라감
-    @Query("SELECT c FROM Commit c WHERE YEAR(c.createdAt) = :year AND MONTH(c.createdAt) = :month")
-    List<Commit> findByCreatedAtYearAndMonth(@Param("year") int year, @Param("month") int month);
+    // 특정 연도와 달에 특정 유저가 올린 커밋을 조회
+    @Query("SELECT c FROM Commit c WHERE YEAR(c.date) = :year AND MONTH(c.date) = :month AND c.user.email = :email")
+    List<Commit> findByDateYearAndMonthAndUserEmail(@Param("year") int year, @Param("month") int month, @Param("email") String email);
 
-    // 특정 날짜에 해당하는 커밋들을 조회하는 메서드
-    @Query("SELECT c FROM Commit c WHERE DATE(c.createdAt) = :date")
-    List<Commit> findByCreatedAtDate(@Param("date") LocalDate date);
+    // 특정한 날에 특정 유저가 올린 커밋을 조회
+    @Query("SELECT c FROM Commit c WHERE c.date = :date AND c.user.email = :email")
+    List<Commit> findByDateAndUserEmail(@Param("date") LocalDate date, @Param("email") String email);
 }
