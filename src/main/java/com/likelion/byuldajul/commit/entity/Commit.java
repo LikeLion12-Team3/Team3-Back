@@ -1,6 +1,6 @@
 package com.likelion.byuldajul.commit.entity;
 
-import com.likelion.byuldajul.board.Entity.Diary;
+import com.likelion.byuldajul.diary.Entity.Diary;
 import com.likelion.byuldajul.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "commits")

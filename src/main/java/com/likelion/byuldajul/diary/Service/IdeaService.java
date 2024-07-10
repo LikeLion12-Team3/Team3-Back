@@ -1,10 +1,10 @@
-package com.likelion.byuldajul.board.Service;
+package com.likelion.byuldajul.diary.Service;
 
-import com.likelion.byuldajul.board.Dto.reponse.IdeaResponseDto;
-import com.likelion.byuldajul.board.Dto.request.CreateIdeaRequestDto;
-import com.likelion.byuldajul.board.Dto.request.UpdateIdeaRequestDto;
-import com.likelion.byuldajul.board.Entity.Idea;
-import com.likelion.byuldajul.board.Repository.IdeaRepository;
+import com.likelion.byuldajul.diary.Dto.reponse.IdeaResponseDto;
+import com.likelion.byuldajul.diary.Dto.request.CreateIdeaRequestDto;
+import com.likelion.byuldajul.diary.Dto.request.UpdateIdeaRequestDto;
+import com.likelion.byuldajul.diary.Entity.Idea;
+import com.likelion.byuldajul.diary.Repository.IdeaRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,7 @@
-package com.likelion.byuldajul.board.Repository;
+package com.likelion.byuldajul.diary.Repository;
 
 
-import com.likelion.byuldajul.board.Entity.Diary;
+import com.likelion.byuldajul.diary.Entity.Diary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

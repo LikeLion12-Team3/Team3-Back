@@ -1,13 +1,8 @@
-package com.likelion.byuldajul.board.Entity;
+package com.likelion.byuldajul.diary.Entity;
 
 import com.likelion.byuldajul.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Entity

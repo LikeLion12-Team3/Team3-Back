@@ -1,7 +1,7 @@
 package com.likelion.byuldajul.summary.Service;
 
 import com.likelion.byuldajul.user.userDetails.CustomUserDetails;
-import com.likelion.byuldajul.board.Service.DiaryService;
+import com.likelion.byuldajul.diary.Service.DiaryService;
 import com.likelion.byuldajul.summary.Entity.Summary;
 import com.likelion.byuldajul.summary.Repository.SummaryRepository;
 
@@ -12,7 +12,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
 
 @Service

@@ -1,6 +1,6 @@
-package com.likelion.byuldajul.board.Repository;
+package com.likelion.byuldajul.diary.Repository;
 
-import com.likelion.byuldajul.board.Entity.Idea;
+import com.likelion.byuldajul.diary.Entity.Idea;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

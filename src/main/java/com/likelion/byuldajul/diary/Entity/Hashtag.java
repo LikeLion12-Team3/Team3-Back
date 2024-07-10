@@ -1,12 +1,10 @@
-package com.likelion.byuldajul.board.Entity;
+package com.likelion.byuldajul.diary.Entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 
 @Getter
