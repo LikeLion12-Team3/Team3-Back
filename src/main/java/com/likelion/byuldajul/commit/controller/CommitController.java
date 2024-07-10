@@ -1,7 +1,6 @@
 package com.likelion.byuldajul.commit.controller;
 
 import com.likelion.byuldajul.commit.dto.CommitDetailsResponseDto;
-import com.likelion.byuldajul.commit.dto.CommitRequestDto;
 import com.likelion.byuldajul.commit.dto.CommitResponseDto;
 import com.likelion.byuldajul.commit.service.CommitService;
 import com.likelion.byuldajul.user.userDetails.CustomUserDetails;
