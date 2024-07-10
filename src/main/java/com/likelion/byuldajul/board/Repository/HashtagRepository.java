@@ -21,5 +21,4 @@ public interface HashtagRepository extends JpaRepository<Hashtag, Long> {
     @Query(value = "select h.name from DiaryHashtag dh join dh.hashtag h where dh.diary.Id = :id")
     List<String> findHashtagsByDiaryId(@Param("id") Long id);
 
-
 }

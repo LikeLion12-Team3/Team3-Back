@@ -3,6 +3,7 @@ package com.likelion.byuldajul.board.Controller;
 import com.likelion.byuldajul.board.Dto.reponse.DiaryListResponseDto;
 import com.likelion.byuldajul.board.Dto.reponse.DiaryResponseDto;
 import com.likelion.byuldajul.board.Dto.request.CreateDiaryRequestDto;
+import com.likelion.byuldajul.board.Dto.request.UpdateDiaryRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/diary")
 @RequiredArgsConstructor
-@CrossOrigin(originPatterns = "*" ,value = "*")
 public class DiaryController {
 
     private final DiaryService diaryService;
@@ -40,15 +40,21 @@ public class DiaryController {
         return diaryService.getDiaryList(hashtag);
     }
 
-//    @GetMapping("/{Id}")
-//    public DiaryResponseDto getDiary(@PathVariable Long Id) {
-//        return diaryService.getDiary(Id);
-//    }
-
     @GetMapping("/{id}")
     public DiaryResponseDto getDiary(@PathVariable Long id) {
         return diaryService.getDiary(id);
     }
+
+    @PatchMapping("/{id}")
+    public void updateDiary(@PathVariable Long id, @RequestBody UpdateDiaryRequestDto updateDiaryRequestDto) {
+        diaryService.updateDiary(id, updateDiaryRequestDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteDiary(@PathVariable Long id) {
+        diaryService.deleteDiary(id);
+    }
+
 
 
 }

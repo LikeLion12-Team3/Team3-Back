@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "hashtags")
-public class Hashtag extends Base {
+public class Hashtag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "hashtag_id")
@@ -25,16 +25,11 @@ public class Hashtag extends Base {
 
     @Builder
     public  Hashtag(String name) {
-//        this.id = id;
         this.name = name;
     }
 
-
-
-
-
-
-
-
+    public void updateHashtag(String name) {
+        this.name = name;
+    }
 
 }

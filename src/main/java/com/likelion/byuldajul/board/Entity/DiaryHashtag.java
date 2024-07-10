@@ -33,8 +33,4 @@ public class DiaryHashtag {
         this.hashtag = hashtag;
     }
 
-
-
-
-
 }

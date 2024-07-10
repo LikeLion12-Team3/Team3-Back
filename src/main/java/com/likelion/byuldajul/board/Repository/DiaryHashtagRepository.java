@@ -9,7 +9,8 @@ import java.util.List;
 @Repository
 public interface DiaryHashtagRepository extends JpaRepository<DiaryHashtag, Long> {
 
-
+    void deleteAllByDiary_Id(Long diary_id);
 
     List<DiaryHashtag> findByDiaryId(Long diaryId);
+  
 }

@@ -22,10 +22,10 @@ public class CommitController {
 
     private final CommitService commitService;
 
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<List<CommitResponseDto>> getCommits(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                              @RequestBody CommitRequestDto requestDto) {
-        List<CommitResponseDto> commits = commitService.getCommitsByYearAndMonth(requestDto, userDetails.getUsername());
+                                                              @RequestParam("year") int year, @RequestParam("month") int month) {
+        List<CommitResponseDto> commits = commitService.getCommitsByYearAndMonth(year, month, userDetails.getUsername());
         return ResponseEntity.ok(commits);
     }
 
