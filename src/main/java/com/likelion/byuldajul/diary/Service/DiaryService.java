@@ -40,10 +40,14 @@ public class DiaryService {
     @Transactional
     public DiaryResponseDto save(String email, CreateDiaryRequestDto createDiaryRequestDto) {
         User user = userRepository.findByEmail(email).orElseThrow();
+
+        Diary diary = diaryRepository.save(createDiaryRequestDto.toEntity(user));
+
         List<Hashtag> hashtags = createDiaryRequestDto.getDiaryHashtags().stream()
-                .map(hashtag -> Hashtag.builder().name(hashtag).build())
+                .map(hashtag -> Hashtag.builder().name(hashtag).diary(diary).build())
                 .toList();
-        Diary diary = diaryRepository.save(createDiaryRequestDto.toEntity(user, hashtags));
+
+        diary.setHashTags(hashtags);
 
         LocalDate localDate = LocalDate.now();
         updateDiarySummary(email, localDate);

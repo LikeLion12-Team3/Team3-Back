@@ -47,4 +47,7 @@ public class Diary extends Base{
         this.plan = plan;
     }
 
+    public void setHashTags(List<Hashtag> hashTags) {
+        this.hashTags = hashTags;
+    }
 }

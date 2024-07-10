@@ -30,7 +30,7 @@ public class CreateDiaryRequestDto {
 
     private List<String> diaryHashtags = new ArrayList<>();
 
-    public Diary toEntity(User user, List<Hashtag> hashtags){
+    public Diary toEntity(User user){
         return Diary.builder()
                 .title(title)
                 .template(template)
@@ -39,7 +39,6 @@ public class CreateDiaryRequestDto {
                 .remark(remark)
                 .plan(plan)
                 .user(user)
-                .hashTags(hashtags)
                 .build();
     }
 
