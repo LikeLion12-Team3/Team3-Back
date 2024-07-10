@@ -43,8 +43,8 @@ public class IdeaController {
 
     @Operation(summary = "아이디어 전체 조회", description = "아이디어 전체 조회")
     @GetMapping("")
-    public List<Idea> getIdeaList(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        return ideaService.getIdeaList(customUserDetails.getUsername());
+    public ResponseEntity<?> getIdeaList(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        return ResponseEntity.ok(ideaService.getIdeaList(customUserDetails.getUsername()));
     }
 
     @Operation(summary = "아이디어 업데이트", description = "아이디어 업데이트")

@@ -43,8 +43,10 @@ public class IdeaService {
 
     }
 
-    public List<Idea> getIdeaList(String email) {
-        return ideaRepository.findAllByUser_Email(email);
+    public List<IdeaResponseDto> getIdeaList(String email) {
+        return ideaRepository.findAllByUser_Email(email).stream()
+                .map(IdeaResponseDto::from)
+                .toList();
     }
 
     @Transactional
