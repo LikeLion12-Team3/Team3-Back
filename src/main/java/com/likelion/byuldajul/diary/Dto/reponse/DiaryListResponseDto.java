@@ -26,7 +26,7 @@ public class DiaryListResponseDto {
                 .Id(diary.getId())
                 .createdAt(diary.getCreatedAt())
                 .title(diary.getTitle())
-                .mainText(diary.getMainText())
+                .mainText(diary.getMainText().substring(0, 10) + "...")
                 .build();
 
     }

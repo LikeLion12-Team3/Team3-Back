@@ -25,7 +25,6 @@ public class IdeaController {
         log.info("아이디어내용: {}", createIdeaRequestDto.getMainText());
 
         ideaService.saveIdea(createIdeaRequestDto);
-
         return "아이디어 생성";
     }
 

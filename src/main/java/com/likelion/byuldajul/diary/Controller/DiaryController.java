@@ -35,24 +35,28 @@ public class DiaryController {
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
-    @GetMapping()
-    public List<DiaryListResponseDto> getDiaryList(@RequestParam String hashtag) {
-        return diaryService.getDiaryList(hashtag);
+    @Operation(summary = "일기 조회 (해시태그)", description = "해시태그로 일기를 조회합니다. 내용은 첫 10글자만 보입니다.")
+    @GetMapping("")
+    public ResponseEntity<List<DiaryListResponseDto>> getDiaryList(@RequestParam String hashtag) {
+        return ResponseEntity.ok(diaryService.getDiaryList(hashtag));
     }
 
+    @Operation(summary = "일기 조회 (ID)", description = "일기 단건 조회 (ID)")
     @GetMapping("/{id}")
-    public DiaryResponseDto getDiary(@PathVariable Long id) {
-        return diaryService.getDiary(id);
+    public ResponseEntity<?> getDiary(@PathVariable Long id) {
+        return ResponseEntity.ok(diaryService.getDiary(id));
     }
 
     @PatchMapping("/{id}")
-    public void updateDiary(@PathVariable Long id, @RequestBody UpdateDiaryRequestDto updateDiaryRequestDto) {
+    public ResponseEntity<?> updateDiary(@PathVariable Long id, @RequestBody UpdateDiaryRequestDto updateDiaryRequestDto) {
         diaryService.updateDiary(id, updateDiaryRequestDto);
+        return ResponseEntity.ok("수정 완료");
     }
 
     @DeleteMapping("/{id}")
-    public void deleteDiary(@PathVariable Long id) {
+    public ResponseEntity<?> deleteDiary(@PathVariable Long id) {
         diaryService.deleteDiary(id);
+        return ResponseEntity.ok("삭제 완료");
     }
 
 

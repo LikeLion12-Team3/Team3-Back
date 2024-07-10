@@ -66,10 +66,9 @@ public class DiaryService {
     public List<DiaryListResponseDto> getDiaryList(String hashtag) {
         List<Diary> diaryList = diaryRepository.findByHashTag(hashtag);
 
-        List<DiaryListResponseDto> responseDtoList = diaryList.stream()
+        return diaryList.stream()
                 .map(DiaryListResponseDto::from)
                 .collect(Collectors.toList());
-        return responseDtoList;
 
     }
 
