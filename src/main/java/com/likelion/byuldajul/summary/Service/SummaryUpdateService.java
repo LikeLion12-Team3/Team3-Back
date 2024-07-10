@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,12 +25,18 @@ public class SummaryUpdateService {
 
 
         // 생성된 요약을 Summary 객체로 저장
-        Summary summary = Summary.builder()
-                .date(date)
-                .content(summaryContent)
-                .email(email)
-                .build();
-        summaryRepository.save(summary);
+        Optional<Summary> optionalSummary = summaryRepository.findByEmailAndAndDate(email, date);
+        if (optionalSummary.isPresent()) {
+            optionalSummary.get().setContent(summaryContent);
+        } else {
+            Summary summary = Summary.builder()
+                    .date(date)
+                    .content(summaryContent)
+                    .email(email)
+                    .build();
+            summaryRepository.save(summary);
+        }
+
     }
 
 }

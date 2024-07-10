@@ -30,4 +30,7 @@ public class Summary {
     private String email;
 
 
+    public void setContent(String content) {
+        this.content = content;
+    }
 }
