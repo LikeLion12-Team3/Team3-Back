@@ -4,6 +4,7 @@ import com.likelion.byuldajul.commit.dto.CommitDetailsResponseDto;
 import com.likelion.byuldajul.commit.dto.CommitResponseDto;
 import com.likelion.byuldajul.commit.service.CommitService;
 import com.likelion.byuldajul.user.userDetails.CustomUserDetails;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ public class CommitController {
 
     private final CommitService commitService;
 
+    @Operation(summary = "커밋 조회", description = "년, 월을 통해 보유한 커밋을 조회합니다.")
     @GetMapping("")
     public ResponseEntity<List<CommitResponseDto>> getCommits(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                               @RequestParam("year") int year, @RequestParam("month") int month) {

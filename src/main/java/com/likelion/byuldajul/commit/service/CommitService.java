@@ -28,6 +28,10 @@ public class CommitService {
         // 주어진 year과 month에 해당하는 커밋들 조회해서 List에 집어넣음
         List<Commit> commits = commitRepository.findByDateYearAndMonthAndUserEmail(year, month, email);
 
+        if (commits.isEmpty()) {
+            return null;
+        }
+
         // 커밋들을 일(day)별로 그룹화하고, 각 일에 해당하는 커밋 개수를 카운트하여 리스트로 반환
         return commits.stream()
 
