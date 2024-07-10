@@ -23,11 +23,7 @@ public class CommitService {
 
     // 특정 연도와 월에 해당하는 커밋 개수를 조회하는 메서드
     @Transactional(readOnly = true)
-    public List<CommitResponseDto> getCommitsByYearAndMonth(CommitRequestDto commitRequestDto, String email) {
-
-        // commitRequestDto 에서 year과 month 추출
-        int year = commitRequestDto.getYear();
-        int month = commitRequestDto.getMonth();
+    public List<CommitResponseDto> getCommitsByYearAndMonth(int year, int month, String email) {
 
         // 주어진 year과 month에 해당하는 커밋들 조회해서 List에 집어넣음
         List<Commit> commits = commitRepository.findByDateYearAndMonthAndUserEmail(year, month, email);
