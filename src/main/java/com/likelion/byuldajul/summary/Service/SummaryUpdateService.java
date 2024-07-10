@@ -27,14 +27,14 @@ public class SummaryUpdateService {
         // 일기 내용을 GPTService에 전달하여 요약 생성
         String summaryContent = gptService.generateSummary(diaryContent);
         if (summaryContent == null || summaryContent.isEmpty()) { // 요약 생성에 실패한 경우
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(Map.of("error", "주어진 일기 내용으로 요약을 생성할 수 없습니다"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "요약을 생성할 수 없습니다."));
         }
 
         // 생성된 요약을 Summary 객체로 저장
         Summary summary = new Summary(email, summaryContent, date);
         summaryRepository.save(summary);
 
-        return ResponseEntity.ok(Map.of("message", "Summary successfully saved"));
+        return ResponseEntity.ok(Map.of("message", "요약이 성공적으로 저장되었습니다."));
     }
 
 }

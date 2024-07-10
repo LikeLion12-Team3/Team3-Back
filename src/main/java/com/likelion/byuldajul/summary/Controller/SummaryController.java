@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,12 +37,12 @@ public class SummaryController {
         }
 
         try {
-            String diaryContent = diaryService.getDiaryContentByYearMonthDay(year, month, dayOfMonth);
-            String summary = gptService.generateSummary(diaryContent);
+//            String diaryContent = diaryService.getDiaryContentByYearMonthDay(year, month, dayOfMonth);
+//            String summary = gptService.generateSummary(diaryContent);
 
-            return ResponseEntity.ok(summary); // 생성된 요약을 HTTP 200 OK 응답으로 반환
+            return ResponseEntity.ok(Map.of("message", "요약이 성공적으로 생성되었습니다.")); // 생성된 요약을 HTTP 200 OK 응답으로 반환
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("요청 처리 중 오류가 발생했습니다"); // 예외가 발생하면, 500 Internal Server Error 응답을 반환
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("요청 처리 중 오류가 발생했습니다."); // 예외가 발생하면, 500 Internal Server Error 응답을 반환
         }
     }
 }
