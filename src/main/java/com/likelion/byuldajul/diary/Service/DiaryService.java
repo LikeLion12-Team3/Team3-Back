@@ -1,6 +1,8 @@
 package com.likelion.byuldajul.diary.Service;
 
 
+import com.likelion.byuldajul.commit.entity.Commit;
+import com.likelion.byuldajul.commit.repository.CommitRepository;
 import com.likelion.byuldajul.diary.Dto.reponse.DiaryListResponseDto;
 import com.likelion.byuldajul.diary.Dto.reponse.DiaryResponseDto;
 import com.likelion.byuldajul.diary.Dto.request.CreateDiaryRequestDto;
@@ -15,6 +17,7 @@ import com.likelion.byuldajul.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -32,6 +35,7 @@ public class DiaryService {
     private final HashtagRepository hashtagRepository;
     private final SummaryUpdateService summaryUpdateService;
     private final UserRepository userRepository;
+    private final CommitRepository commitRepository;
 
     @Transactional
     public DiaryResponseDto save(String email, CreateDiaryRequestDto createDiaryRequestDto) {
@@ -43,6 +47,7 @@ public class DiaryService {
 
         LocalDate localDate = LocalDate.now();
         updateDiarySummary(email, localDate);
+        commitRepository.save(Commit.builder().diary(diary).title(diary.getTitle()).date(localDate).user(user).build());
 
         return DiaryResponseDto.of(diary);
     }
@@ -86,6 +91,9 @@ public class DiaryService {
                 .map(hashtag -> Hashtag.builder().name(hashtag).diary(diary).build())
                 .toList();
         hashtagRepository.saveAll(hashtags);
+
+        LocalDate localDate = LocalDate.now();
+        updateDiarySummary(email, localDate);
     }
 
     @Transactional
@@ -97,6 +105,11 @@ public class DiaryService {
             throw new SecurityException("권한이 없습니다.");
         }
         diaryRepository.deleteById(id);
+
+        LocalDate localDate = LocalDate.now();
+        updateDiarySummary(email, localDate);
+        commitRepository.deleteByDiary_Id(id);
+
     }
 
     public Map<String, Long> getHashTagList(String email) {
@@ -112,7 +125,8 @@ public class DiaryService {
     }
 
 
-    private void updateDiarySummary(String email, LocalDate localDate) {
+    @Async
+    void updateDiarySummary(String email, LocalDate localDate) {
         List<Diary> diaries = diaryRepository.findAllByUser_Email(email);
         List<String> contents = diaries.stream()
                 .map(Diary::getMainText)
