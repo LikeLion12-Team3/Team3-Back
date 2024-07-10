@@ -4,6 +4,7 @@ import com.likelion.byuldajul.diary.Dto.reponse.DiaryListResponseDto;
 import com.likelion.byuldajul.diary.Dto.reponse.DiaryResponseDto;
 import com.likelion.byuldajul.diary.Dto.request.CreateDiaryRequestDto;
 import com.likelion.byuldajul.diary.Dto.request.UpdateDiaryRequestDto;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,8 @@ public class DiaryController {
 
     private final DiaryService diaryService;
 
-    @PostMapping()
+    @Operation(summary = "새 일기 생성", description = "새 일기를 생성합니다.")
+    @PostMapping("")
     public ResponseEntity<?> createDiary(@RequestBody CreateDiaryRequestDto createDiaryRequestDto) {
         log.info("제목: {}", createDiaryRequestDto.getTitle());
         log.info("템플릿: {}", createDiaryRequestDto.getTemplate());
