@@ -6,18 +6,20 @@ import com.likelion.byuldajul.diary.Dto.reponse.DiaryResponseDto;
 import com.likelion.byuldajul.diary.Dto.request.CreateDiaryRequestDto;
 import com.likelion.byuldajul.diary.Dto.request.UpdateDiaryRequestDto;
 import com.likelion.byuldajul.diary.Entity.Diary;
-import com.likelion.byuldajul.diary.Entity.DiaryHashtag;
 import com.likelion.byuldajul.diary.Entity.Hashtag;
-import com.likelion.byuldajul.diary.Repository.DiaryHashtagRepository;
 import com.likelion.byuldajul.diary.Repository.DiaryRepository;
 import com.likelion.byuldajul.diary.Repository.HashtagRepository;
+import com.likelion.byuldajul.summary.Service.SummaryUpdateService;
+import com.likelion.byuldajul.user.entity.User;
+import com.likelion.byuldajul.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -28,43 +30,26 @@ public class DiaryService {
 
     private final DiaryRepository diaryRepository;
     private final HashtagRepository hashtagRepository;
-    private final DiaryHashtagRepository diaryHashtagRepository;
+    private final SummaryUpdateService summaryUpdateService;
+    private final UserRepository userRepository;
 
     @Transactional
-    public DiaryResponseDto save(CreateDiaryRequestDto createDiaryRequestDto) {
+    public DiaryResponseDto save(String email, CreateDiaryRequestDto createDiaryRequestDto) {
+        User user = userRepository.findByEmail(email).orElseThrow();
+        List<Hashtag> hashtags = createDiaryRequestDto.getDiaryHashtags().stream()
+                .map(hashtag -> Hashtag.builder().name(hashtag).build())
+                .toList();
+        Diary diary = diaryRepository.save(createDiaryRequestDto.toEntity(user, hashtags));
 
-        Diary diary = diaryRepository.save(createDiaryRequestDto.toEntity());
-        List<String> hashtags = hashtagRepository.findHashtagsByDiaryId(diary.getId());
-        saveHashtag(diary, createDiaryRequestDto.getDiaryHashtags());
+        LocalDate localDate = LocalDate.now();
+//        updateDiarySummary(email, localDate);
 
-        return DiaryResponseDto.of(diary, hashtags);
+        return DiaryResponseDto.of(diary);
     }
 
-    private void saveHashtag(Diary diary, List<String> hashtagList) {
-        for (String hashtagName : hashtagList) {
-            Optional<Hashtag> optionalHashtag = hashtagRepository.findByName(hashtagName);
 
-            Hashtag hashtag;
-            hashtag = optionalHashtag.orElseGet(() ->
-                    hashtagRepository.save(Hashtag.builder()
-                            .name(hashtagName)
-                            .build()));
-
-            log.info(hashtag.toString());
-
-            DiaryHashtag diaryHashtag = DiaryHashtag.builder()
-                    .diary(diary)
-                    .hashtag(hashtag)
-                    .build();
-
-            log.info(diaryHashtag.toString());
-
-            diaryHashtagRepository.save(diaryHashtag);
-        }
-    }
-
-    public List<DiaryListResponseDto> getDiaryList(String hashtag) {
-        List<Diary> diaryList = diaryRepository.findByHashTag(hashtag);
+    public List<DiaryListResponseDto> getDiaryListByQuery(String email, String query) {
+        List<Diary> diaryList = diaryRepository.findByQuery(email, query);
 
         return diaryList.stream()
                 .map(DiaryListResponseDto::from)
@@ -72,27 +57,22 @@ public class DiaryService {
 
     }
 
-    public DiaryResponseDto getDiary(Long id) {
-        Diary diary = diaryRepository.findDiaryById(id);
-        List<String> hashtags = hashtagRepository.findHashtagsByDiaryId(id);
+    public DiaryResponseDto getDiary(String email, Long id) {
+        Diary diary = diaryRepository.findById(id).orElseThrow();
+        if (!diary.getUser().getEmail().equals(email)) {
+            throw new SecurityException("권한이 없습니다.");
+        }
 
-        return DiaryResponseDto.builder()
-                .id(diary.getId())
-                .createdAt(diary.getCreatedAt())
-                .modifiedAt(diary.getModifiedAt())
-                .title(diary.getTitle())
-                .template(diary.getTemplate())
-                .mainText(diary.getMainText())
-                .impression(diary.getImpression())
-                .remark(diary.getRemark())
-                .plan(diary.getPlan())
-                .hashtagNames(hashtags)
-                .build();
+        return DiaryResponseDto.of(diary);
     }
 
     @Transactional
-    public void updateDiary(Long id, UpdateDiaryRequestDto updateDiaryRequestDto) {
-        Diary diary = diaryRepository.findDiaryById(id);
+    public void updateDiary(String email, Long id, UpdateDiaryRequestDto updateDiaryRequestDto) {
+        Diary diary = diaryRepository.findById(id).orElseThrow();
+
+        if (!diary.getUser().getEmail().equals(email)) {
+            throw new SecurityException("권한이 없습니다.");
+        }
 
         diary.update(updateDiaryRequestDto.getTitle(),
                 updateDiaryRequestDto.getTemplate(),
@@ -101,28 +81,46 @@ public class DiaryService {
                 updateDiaryRequestDto.getRemark(),
                  updateDiaryRequestDto.getPlan());
 
-        diaryHashtagRepository.deleteAllByDiary_Id(id);
-
-        saveHashtag(diary, updateDiaryRequestDto.getDiaryHashtags());
+        hashtagRepository.deleteAllByDiary_Id(diary.getId());
+        List<Hashtag> hashtags = updateDiaryRequestDto.getDiaryHashtags().stream()
+                .map(hashtag -> Hashtag.builder().name(hashtag).diary(diary).build())
+                .toList();
+        hashtagRepository.saveAll(hashtags);
     }
 
     @Transactional
-    public void deleteDiary(Long Id)  {
+    public void deleteDiary(String email, Long id)  {
 
-        diaryHashtagRepository.deleteAllByDiary_Id(Id);
+        Diary diary = diaryRepository.findById(id).orElseThrow();
 
-        diaryRepository.deleteById(Id);
+        if (!diary.getUser().getEmail().equals(email)) {
+            throw new SecurityException("권한이 없습니다.");
+        }
+        diaryRepository.deleteById(id);
+    }
+
+    public Map<String, Long> getHashTagList(String email) {
+        List<Diary> diaries = diaryRepository.findAllByUserEmailWithHasTag(email);
+
+        return diaries.stream()
+                .flatMap(diary -> diary.getHashTags().stream())
+                .collect(Collectors.groupingBy(
+                        Hashtag::getName,
+                        Collectors.counting()
+                )
+                );
     }
 
 
-    private void updateDiarySummary(String email) {
+    private void updateDiarySummary(String email, LocalDate localDate) {
         List<Diary> diaries = diaryRepository.findAllByUser_Email(email);
         List<String> contents = diaries.stream()
                 .map(Diary::getMainText)
                 .toList();
 
-        //TODO : GPT 요약 보내기
+        summaryUpdateService.updateDiarySummary(email, contents, localDate);
     }
+
 }
 
 
