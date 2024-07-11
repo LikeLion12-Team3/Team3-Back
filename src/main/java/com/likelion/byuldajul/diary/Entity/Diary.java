@@ -23,8 +23,10 @@ public class Diary extends Base{
 
     private String template;
 
+    @Column(columnDefinition = "TEXT")
     private String mainText;
 
+    @Column(columnDefinition = "TEXT")
     private String impression;
 
     private String remark;
