@@ -14,9 +14,11 @@ import com.likelion.byuldajul.diary.Repository.HashtagRepository;
 import com.likelion.byuldajul.summary.Service.SummaryUpdateService;
 import com.likelion.byuldajul.user.entity.User;
 import com.likelion.byuldajul.user.repository.UserRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -88,7 +90,7 @@ public class DiaryService {
                 updateDiaryRequestDto.getMainText(),
                 updateDiaryRequestDto.getImpression(),
                 updateDiaryRequestDto.getRemark(),
-                 updateDiaryRequestDto.getPlan());
+                updateDiaryRequestDto.getPlan());
 
         hashtagRepository.deleteAllByDiary_Id(diary.getId());
         List<Hashtag> hashtags = updateDiaryRequestDto.getDiaryHashtags().stream()
@@ -123,9 +125,9 @@ public class DiaryService {
         return diaries.stream()
                 .flatMap(diary -> diary.getHashTags().stream())
                 .collect(Collectors.groupingBy(
-                        Hashtag::getName,
-                        Collectors.counting()
-                )
+                                Hashtag::getName,
+                                Collectors.counting()
+                        )
                 );
     }
 
@@ -138,6 +140,13 @@ public class DiaryService {
                 .toList();
 
         summaryUpdateService.updateDiarySummary(email, contents, localDate);
+    }
+
+    @Transactional(readOnly = true)
+    public Long getLatestDiaryId(String email) {
+        Pageable pageable = PageRequest.of(0, 1); // 첫 번째 페이지의 첫 번째 결과만 가져옴
+        List<Long> ids = diaryRepository.findTopByUserEmailOrderByCreatedAtDesc(email, pageable);
+        return ids.isEmpty() ? null : ids.get(0); // 결과가 없으면 null을 반환, 있으면 첫 번째 결과를 반환
     }
 
 }
