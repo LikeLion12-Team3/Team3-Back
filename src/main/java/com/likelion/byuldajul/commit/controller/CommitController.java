@@ -31,6 +31,7 @@ public class CommitController {
     }
 
     @GetMapping("/by-day")
+    @Operation(summary = "날짜별 커밋 상세 조회", description = "해당 날짜의 커밋 상세 정보를 조회합니다.")
     public ResponseEntity<List<CommitDetailsResponseDto>> getCommitsByDay(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                                           @RequestParam("date") LocalDate date) {
         List<CommitDetailsResponseDto> commitDetails = commitService.getCommitsByDay(date, userDetails.getUsername());

@@ -10,12 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -27,6 +23,7 @@ public class UserController {
     private final UserService userService;
 
     //회원가입
+    @Operation(summary = "회원가입", description = "유저를 생성합니다.")
     @PostMapping(value = "/signup")
     public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserRequestDto createUserRequestDto) {
         CreateUserResponseDto createUserResponseDto = userService.signUp(createUserRequestDto);
@@ -35,6 +32,7 @@ public class UserController {
 
     //회원정보 조회
     @GetMapping
+    @Operation(summary = "회원정보 조회", description = "회원정보를 조회합니다.")
     public ResponseEntity<?> getUsers(@AuthenticationPrincipal CustomUserDetails userDetails) {
         UserResponseDto userResponseDto = userService.getUserByEmail(userDetails.getUsername());
         return ResponseEntity.ok(userResponseDto);
@@ -42,6 +40,7 @@ public class UserController {
 
     //닉네임 변경
     @PatchMapping(value = "/nickname")
+    @Operation(summary = "회원 이름 변경", description = "회원의 이름을 변경합니다.")
     public ResponseEntity<?> updateNickname(@AuthenticationPrincipal CustomUserDetails userDetails,
                                             @Valid @RequestBody UpdateNicknameRequestDto updateNicknameRequestDto) {
         userService.updateNickname(userDetails.getUsername(), updateNicknameRequestDto.getNickname());
@@ -50,6 +49,7 @@ public class UserController {
 
     //비밀번호 변경
     @PutMapping(value = "/pw")
+    @Operation(summary = "비밀번호 변경", description = "회원의 비밀번호를 변경합니다.")
     public ResponseEntity<?> updatePassword(@AuthenticationPrincipal CustomUserDetails userDetails,
                                             @Valid @RequestBody UpdatePasswordRequestDto updatePasswordRequestDto) {
         userService.updatePassword(userDetails.getUsername(), updatePasswordRequestDto.getNewPassword());
@@ -58,6 +58,7 @@ public class UserController {
 
     //회원 탈퇴
     @DeleteMapping
+    @Operation(summary = "회원 탈퇴", description = "회원의 정보를 삭제합니다.")
     public ResponseEntity<?> deleteUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
         userService.deleteUser(userDetails.getUsername());
         return ResponseEntity.ok(Map.of("message", "사용자가 성공적으로 삭제되었습니다"));
