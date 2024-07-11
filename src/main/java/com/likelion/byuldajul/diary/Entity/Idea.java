@@ -22,7 +22,9 @@ public class Idea extends Base {
 
     private String title;
 
-    private String mainText;
+
+    @Column(columnDefinition = "TEXT")
+    private String  mainText;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "email", referencedColumnName = "email")
