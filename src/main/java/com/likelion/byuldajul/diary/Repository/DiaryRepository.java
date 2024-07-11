@@ -2,6 +2,7 @@ package com.likelion.byuldajul.diary.Repository;
 
 
 import com.likelion.byuldajul.diary.Entity.Diary;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,4 +23,8 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
 
     @Query("SELECT d FROM Diary d JOIN FETCH d.hashTags WHERE d.user.email = :email")
     List<Diary> findAllByUserEmailWithHasTag(@Param("email") String email);
+
+    // 최근 쓴 일기의 id를 가져오는 메서드
+    @Query("SELECT d.id FROM Diary d WHERE d.user.email = :email ORDER BY d.createdAt DESC")
+    List<Long> findTopByUserEmailOrderByCreatedAtDesc(@Param("email") String email, Pageable pageable);
 }
