@@ -9,20 +9,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserResponseDto {
 
-    private String eamil;
+    private String email;
 
     private String nickname;
 
     @Builder
-    public UserResponseDto(String eamil, String nickname) {
-        this.eamil = eamil;
+    public UserResponseDto(String email, String nickname) {
+        this.email = email;
         this.nickname = nickname;
     }
 
     // Entity -> DTO 변환
     public static UserResponseDto from(User user) {
         return UserResponseDto.builder()
-                .eamil(user.getEmail())
+                .email(user.getEmail())
                 .nickname(user.getNickname())
                 .build();
     }

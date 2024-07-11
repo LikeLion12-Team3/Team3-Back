@@ -1,5 +1,6 @@
 package com.likelion.byuldajul.commit.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class CommitDetailsResponseDto {
 
@@ -18,11 +21,17 @@ public class CommitDetailsResponseDto {
 
     private LocalDate date;
 
+    private String template;
+
     private String title;
 
     private String mainText;
 
     private String impression;
+
+    private String remark;
+
+    private String plan;
 
     private List<String> hashtags;
 
