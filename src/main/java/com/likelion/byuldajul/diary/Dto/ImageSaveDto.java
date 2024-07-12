@@ -1,20 +1,18 @@
-package com.likelion.byuldajul.diary.Dto.request;
+package com.likelion.byuldajul.diary.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
-public class UpdateIdeaRequestDto {
-
-    public String title;
-
-    public String mainText;
-
+@Setter
+public class ImageSaveDto {
+    private List<MultipartFile> images = new ArrayList<>();
 }

@@ -7,6 +7,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.awt.*;
+import java.util.List;
+import java.util.UUID;
+
 @Entity
 @Getter
 @Builder
@@ -35,6 +39,9 @@ public class Idea extends Base {
         this.title = title;
         this.mainText = mainText;
     }
+
+
+
 
 
 
