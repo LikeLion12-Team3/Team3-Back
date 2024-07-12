@@ -28,14 +28,6 @@ public class IdeaService {
     private final ImageService imageService;
 
 
-    @Transactional
-    public IdeaResponseDto saveIdea(String email, CreateIdeaRequestDto createIdeaRequestDto) {
-        User user = userRepository.findByEmail(email).orElseThrow();
-        Idea idea = ideaRepository.save(createIdeaRequestDto.toEntity(user));
-        return IdeaResponseDto.from(idea);
-
-    }
-
     public IdeaResponseDto getIdea(String email, Long id) {
         Idea idea = ideaRepository.findById(id).orElseThrow();
 
@@ -47,6 +39,15 @@ public class IdeaService {
         List<Image> images = imageRepository.findAllByIdea_Id(id);
         ideaResponseDto.setImageURL(images.stream().map(Image::getAccessUrl).toList());
         return ideaResponseDto;
+
+    }
+
+    @Transactional
+    public IdeaResponseDto saveIdea(String email, CreateIdeaRequestDto createIdeaRequestDto, List<MultipartFile> images) {
+        User user = userRepository.findByEmail(email).orElseThrow();
+        Idea idea = ideaRepository.save(createIdeaRequestDto.toEntity(user));
+        imageService.saveImages(images, idea);
+        return IdeaResponseDto.from(idea);
 
     }
 
@@ -77,6 +78,8 @@ public class IdeaService {
         }
 
         idea.update(updateIdeaRequestDto.getTitle(), updateIdeaRequestDto.getMainText());
+
+        imageService.saveImages(images, idea);
         ideaRepository.save(idea);
     }
 
@@ -89,6 +92,10 @@ public class IdeaService {
         }
 
         ideaRepository.deleteIdeaById(id);
+
+        //원래 있던 이미지 모두 삭제
+        imageRepository.findAllByIdea_Id(id)
+                .forEach(image -> imageService.deleteImage(image.getOriginName()));
     }
 
 

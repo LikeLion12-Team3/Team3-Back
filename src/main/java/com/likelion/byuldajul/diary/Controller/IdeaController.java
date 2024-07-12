@@ -27,17 +27,16 @@ public class IdeaController {
     private final ImageService imageService;
 
 
-    @Operation(summary = "아이디어 생성", description = "아이디어를 생성합니다.")
+    @Operation(summary = "아이디어 생성", description = "아이디어를 생성합니다. \n (Header) Content-Type : multipart/form-data;boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW")
     @PostMapping("")
     public ResponseEntity<?> createIdea(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                         @RequestPart CreateIdeaRequestDto createIdeaRequestDto,
                                         @RequestPart("images") List<MultipartFile> images) {
         log.info("제목: {}", createIdeaRequestDto.getTitle());
         log.info("아이디어내용: {}", createIdeaRequestDto.getMainText());
-        imageService.saveImages(images);
 
         return ResponseEntity.ok(ideaService.saveIdea(customUserDetails.getUsername(),
-                createIdeaRequestDto));
+                createIdeaRequestDto, images));
 
     }
 
@@ -59,7 +58,7 @@ public class IdeaController {
     public void updateIdea(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                            @PathVariable Long id,
                            @RequestPart UpdateIdeaRequestDto updateIdeaRequestDto,
-                            @RequestPart("images") List<MultipartFile> images) {
+                           @RequestPart("images") List<MultipartFile> images) {
         ideaService.updateIdea(customUserDetails.getUsername(), id, updateIdeaRequestDto, images);
     }
 

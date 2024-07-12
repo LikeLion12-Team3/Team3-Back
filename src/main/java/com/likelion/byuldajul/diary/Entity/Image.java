@@ -25,14 +25,15 @@ public class Image {
 
     private String accessUrl; // S3 내부 이미지에 접근할 수 있는 URL
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idea_id")
     private Idea idea;
 
-    public Image(String originName) {
+    public Image(String originName, Idea idea) {
         this.originName = originName;
         this.storedName = getFileName(originName);
         this.accessUrl = "";
+        this.idea = idea;
     }
 
     public void setAccessUrl(String accessUrl) {
