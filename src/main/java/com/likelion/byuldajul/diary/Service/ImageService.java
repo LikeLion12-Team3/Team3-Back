@@ -34,8 +34,8 @@ public class ImageService {
         return resultList;
     }
 
-    @Transactional
-    public String saveImage(MultipartFile multipartFile) {
+
+    private String saveImage(MultipartFile multipartFile) {
         String originalName = multipartFile.getOriginalFilename();
         Image image = new Image(originalName);
         String filename = image.getStoredName();

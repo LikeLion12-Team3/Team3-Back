@@ -57,8 +57,10 @@ public class IdeaController {
     @Operation(summary = "아이디어 업데이트", description = "아이디어 업데이트")
     @PatchMapping("/{id}")
     public void updateIdea(@AuthenticationPrincipal CustomUserDetails customUserDetails,
-                           @PathVariable Long id, @RequestBody UpdateIdeaRequestDto updateIdeaRequestDto) {
-        ideaService.updateIdea(customUserDetails.getUsername(), id, updateIdeaRequestDto);
+                           @PathVariable Long id,
+                           @RequestPart UpdateIdeaRequestDto updateIdeaRequestDto,
+                            @RequestPart("images") List<MultipartFile> images) {
+        ideaService.updateIdea(customUserDetails.getUsername(), id, updateIdeaRequestDto, images);
     }
 
     @Operation(summary = "아이디어 삭제", description = "아이디어 삭제")

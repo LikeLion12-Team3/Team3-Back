@@ -15,11 +15,7 @@ public class ImageController {
 
     private final ImageService imageService;
 
-    @PostMapping()
-    @ResponseStatus(HttpStatus.OK)
-    public List<String> saveImage(@RequestPart("images") List<MultipartFile> images) {
-        return imageService.saveImages(images);
-    }
+
 
     // S3에 저장된 이미지를 삭제하는 로직, 이미지 파일의 확장자까지 정확하게 입력해야 삭제 가능
     // S3에 저장되지 않은 이미지 파일의 이름으로 요청하여도 오류 발생하지 않음
