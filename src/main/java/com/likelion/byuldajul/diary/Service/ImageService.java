@@ -27,6 +27,9 @@ public class ImageService {
     public List<String> saveImages(List<MultipartFile> multipartFiles, Idea idea) {
         List<String> resultList = new ArrayList<>();
 
+        if (multipartFiles.isEmpty()) {
+            return null;
+        }
         for (MultipartFile multipartFile : multipartFiles) {
             String value = saveImage(multipartFile, idea);
             resultList.add(value);

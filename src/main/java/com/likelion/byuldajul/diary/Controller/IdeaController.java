@@ -31,7 +31,7 @@ public class IdeaController {
     @PostMapping("")
     public ResponseEntity<?> createIdea(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                         @RequestPart CreateIdeaRequestDto createIdeaRequestDto,
-                                        @RequestPart("images") List<MultipartFile> images) {
+                                        @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         log.info("제목: {}", createIdeaRequestDto.getTitle());
         log.info("아이디어내용: {}", createIdeaRequestDto.getMainText());
 
@@ -58,7 +58,7 @@ public class IdeaController {
     public void updateIdea(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                            @PathVariable Long id,
                            @RequestPart UpdateIdeaRequestDto updateIdeaRequestDto,
-                           @RequestPart("images") List<MultipartFile> images) {
+                           @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         ideaService.updateIdea(customUserDetails.getUsername(), id, updateIdeaRequestDto, images);
     }
 
