@@ -14,13 +14,16 @@ import com.likelion.byuldajul.diary.Repository.HashtagRepository;
 import com.likelion.byuldajul.summary.Service.SummaryUpdateService;
 import com.likelion.byuldajul.user.entity.User;
 import com.likelion.byuldajul.user.repository.UserRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -88,7 +91,7 @@ public class DiaryService {
                 updateDiaryRequestDto.getMainText(),
                 updateDiaryRequestDto.getImpression(),
                 updateDiaryRequestDto.getRemark(),
-                 updateDiaryRequestDto.getPlan());
+                updateDiaryRequestDto.getPlan());
 
         hashtagRepository.deleteAllByDiary_Id(diary.getId());
         List<Hashtag> hashtags = updateDiaryRequestDto.getDiaryHashtags().stream()
@@ -123,21 +126,31 @@ public class DiaryService {
         return diaries.stream()
                 .flatMap(diary -> diary.getHashTags().stream())
                 .collect(Collectors.groupingBy(
-                        Hashtag::getName,
-                        Collectors.counting()
-                )
+                                Hashtag::getName,
+                                Collectors.counting()
+                        )
                 );
     }
 
 
     @Async
     void updateDiarySummary(String email, LocalDate localDate) {
-        List<Diary> diaries = diaryRepository.findAllByUser_Email(email);
+        log.info("비동기 메소드 시작: updateDiarySummary");
+        // 비동기 작업 수행
+        List<Diary> diaries = diaryRepository.findAllByUser_EmailAndCreatedAtDate(email, localDate);
         List<String> contents = diaries.stream()
                 .map(Diary::getMainText)
                 .toList();
 
         summaryUpdateService.updateDiarySummary(email, contents, localDate);
+        log.info("비동기 메소드 종료: updateDiarySummary");
+    }
+
+    @Transactional(readOnly = true)
+    public Long getLatestDiaryId(String email) {
+        Pageable pageable = PageRequest.of(0, 1); // 첫 번째 페이지의 첫 번째 결과만 가져옴
+        List<Long> ids = diaryRepository.findTopByUserEmailOrderByCreatedAtDesc(email, pageable);
+        return ids.isEmpty() ? null : ids.get(0); // 결과가 없으면 null을 반환, 있으면 첫 번째 결과를 반환
     }
 
 }

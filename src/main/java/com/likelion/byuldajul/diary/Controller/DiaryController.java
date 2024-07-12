@@ -2,13 +2,13 @@ package com.likelion.byuldajul.diary.Controller;
 
 import com.likelion.byuldajul.diary.Dto.reponse.DiaryListResponseDto;
 import com.likelion.byuldajul.diary.Dto.reponse.DiaryResponseDto;
+import com.likelion.byuldajul.diary.Dto.reponse.LatestDiaryIdResponseDto;
 import com.likelion.byuldajul.diary.Dto.request.CreateDiaryRequestDto;
 import com.likelion.byuldajul.diary.Dto.request.UpdateDiaryRequestDto;
 import com.likelion.byuldajul.user.userDetails.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.connection.ReactiveSetCommands;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -76,6 +76,14 @@ public class DiaryController {
         return ResponseEntity.ok("삭제 완료");
     }
 
-
+    @Operation(summary = "가장 최근 일기 ID 조회", description = "가장 최근에 작성된 일기의 ID를 조회합니다.")
+    @GetMapping("/latest-id")
+    public ResponseEntity<LatestDiaryIdResponseDto> getLatestDiaryId(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        Long latestDiaryId = diaryService.getLatestDiaryId(customUserDetails.getUsername()); // email 넘겨주기
+        LatestDiaryIdResponseDto responseDto = LatestDiaryIdResponseDto.builder()
+                .latestDiaryId(latestDiaryId)
+                .build();
+        return ResponseEntity.ok(responseDto);
+    }
 
 }

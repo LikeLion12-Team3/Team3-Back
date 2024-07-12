@@ -1,6 +1,7 @@
 package com.likelion.byuldajul.diary.Repository;
 
 import com.likelion.byuldajul.diary.Entity.Idea;
+import com.likelion.byuldajul.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +16,5 @@ public interface IdeaRepository extends JpaRepository<Idea, Long> {
 
     void deleteIdeaById(Long id);
 
+    void deleteAllByUser(User user);
 }
