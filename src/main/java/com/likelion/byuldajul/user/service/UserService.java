@@ -94,9 +94,9 @@ public class UserService {
                 .orElseThrow(() -> new NoSuchElementException("요청한 사용자를 찾을 수 없습니다"));
 
         // 사용자의 모든 Diary와 Idea 삭제
-        diaryRepository.deleteByUser(user);
-        ideaRepository.deleteByUser(user);
-        commitRepository.deleteByUser(user);
+        diaryRepository.deleteAllByUser(user);
+        ideaRepository.deleteAllByUser(user);
+        commitRepository.deleteAllByUser(user);
 
         userRepository.delete(user);
 
