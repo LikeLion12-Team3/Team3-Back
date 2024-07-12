@@ -46,8 +46,11 @@ public class IdeaService {
     public IdeaResponseDto saveIdea(String email, CreateIdeaRequestDto createIdeaRequestDto, List<MultipartFile> images) {
         User user = userRepository.findByEmail(email).orElseThrow();
         Idea idea = ideaRepository.save(createIdeaRequestDto.toEntity(user));
-        imageService.saveImages(images, idea);
-        return IdeaResponseDto.from(idea);
+        List<String> imageUrls = imageService.saveImages(images, idea);
+
+        IdeaResponseDto ideaResponseDto = IdeaResponseDto.from(idea);
+        ideaResponseDto.setImageURL(imageUrls);
+        return ideaResponseDto;
 
     }
 
