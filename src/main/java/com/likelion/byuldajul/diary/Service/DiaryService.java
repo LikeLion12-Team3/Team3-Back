@@ -134,12 +134,15 @@ public class DiaryService {
 
     @Async
     void updateDiarySummary(String email, LocalDate localDate) {
+        log.info("비동기 메소드 시작: updateDiarySummary");
+        // 비동기 작업 수행
         List<Diary> diaries = diaryRepository.findAllByUser_Email(email);
         List<String> contents = diaries.stream()
                 .map(Diary::getMainText)
                 .toList();
 
         summaryUpdateService.updateDiarySummary(email, contents, localDate);
+        log.info("비동기 메소드 종료: updateDiarySummary");
     }
 
     @Transactional(readOnly = true)
