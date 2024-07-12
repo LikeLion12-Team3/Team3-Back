@@ -23,6 +23,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -136,7 +137,7 @@ public class DiaryService {
     void updateDiarySummary(String email, LocalDate localDate) {
         log.info("비동기 메소드 시작: updateDiarySummary");
         // 비동기 작업 수행
-        List<Diary> diaries = diaryRepository.findAllByUser_Email(email);
+        List<Diary> diaries = diaryRepository.findAllByUser_EmailAndCreatedAtDate(email, localDate);
         List<String> contents = diaries.stream()
                 .map(Diary::getMainText)
                 .toList();
