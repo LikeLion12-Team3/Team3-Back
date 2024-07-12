@@ -1,6 +1,7 @@
 package com.likelion.byuldajul.commit.repository;
 
 import com.likelion.byuldajul.commit.entity.Commit;
+import com.likelion.byuldajul.diary.Entity.Diary;
 import com.likelion.byuldajul.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,4 +25,6 @@ public interface CommitRepository extends JpaRepository<Commit, Long> {
     void deleteByDiary_Id(Long id);
 
     void deleteAllByUser(User user);
+
+    void deleteByDiary(Diary diary);
 }
