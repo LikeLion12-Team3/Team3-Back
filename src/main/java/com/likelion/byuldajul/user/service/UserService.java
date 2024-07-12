@@ -1,5 +1,8 @@
 package com.likelion.byuldajul.user.service;
 
+import com.likelion.byuldajul.commit.repository.CommitRepository;
+import com.likelion.byuldajul.diary.Repository.DiaryRepository;
+import com.likelion.byuldajul.diary.Repository.IdeaRepository;
 import com.likelion.byuldajul.exception.ConflictException;
 import com.likelion.byuldajul.user.dto.CreateUserRequestDto;
 import com.likelion.byuldajul.user.dto.CreateUserResponseDto;
@@ -21,6 +24,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
+    private final DiaryRepository diaryRepository;
+    private final IdeaRepository ideaRepository;
+    private final CommitRepository commitRepository;
 
     //유저 생성(회원가입)
     @Transactional
@@ -87,9 +93,15 @@ public class UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NoSuchElementException("요청한 사용자를 찾을 수 없습니다"));
 
-        log.info("[ User Service ] 사용자 탈퇴가 완료되었습니다 ---> {}", user.getEmail());
+        // 사용자의 모든 Diary와 Idea 삭제
+        diaryRepository.deleteByUser(user);
+        ideaRepository.deleteByUser(user);
+        commitRepository.deleteByUser(user);
 
         userRepository.delete(user);
+
+        log.info("[ User Service ] 사용자 탈퇴가 완료되었습니다 ---> {}", user.getEmail());
+
 
         // 해당 유저의 refresh 토큰 삭제
         log.info("이메일에 대한 토큰 삭제를 시도합니다: {}", email);

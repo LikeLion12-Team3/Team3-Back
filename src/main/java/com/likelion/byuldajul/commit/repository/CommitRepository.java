@@ -1,6 +1,7 @@
 package com.likelion.byuldajul.commit.repository;
 
 import com.likelion.byuldajul.commit.entity.Commit;
+import com.likelion.byuldajul.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,4 +22,6 @@ public interface CommitRepository extends JpaRepository<Commit, Long> {
     List<Commit> findByDateAndUserEmail(@Param("date") LocalDate date, @Param("email") String email);
 
     void deleteByDiary_Id(Long id);
+
+    void deleteByUser(User user);
 }
