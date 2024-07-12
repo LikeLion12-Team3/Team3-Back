@@ -94,11 +94,12 @@ public class IdeaService {
             throw new SecurityException("권한이 없습니다.");
         }
 
-        ideaRepository.deleteIdeaById(id);
-
         //원래 있던 이미지 모두 삭제
         imageRepository.findAllByIdea_Id(id)
                 .forEach(image -> imageService.deleteImage(image.getOriginName()));
+
+        ideaRepository.deleteIdeaById(id);
+
     }
 
 
