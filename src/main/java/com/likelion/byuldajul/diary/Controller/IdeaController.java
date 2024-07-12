@@ -24,7 +24,6 @@ import java.util.List;
 public class IdeaController {
 
     private final IdeaService ideaService;
-    private final ImageService imageService;
 
 
     @Operation(summary = "아이디어 생성", description = "아이디어를 생성합니다. \n (Header) Content-Type : multipart/form-data;boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW")
@@ -65,10 +64,8 @@ public class IdeaController {
     @Operation(summary = "아이디어 삭제", description = "아이디어 삭제")
     @DeleteMapping("/{id}")
     public String deleteIdea(@AuthenticationPrincipal CustomUserDetails customUserDetails,
-                           @PathVariable Long id,
-                           @RequestParam("name") String fileName) {
+                           @PathVariable Long id) {
         ideaService.deleteIdea(customUserDetails.getUsername(), id);
-        imageService.deleteImage(fileName);
 
         return "아이디어가 삭제되었습니다.";
     }
