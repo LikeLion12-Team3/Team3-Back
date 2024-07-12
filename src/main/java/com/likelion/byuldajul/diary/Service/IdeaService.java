@@ -73,4 +73,5 @@ public class IdeaService {
         ideaRepository.deleteIdeaById(id);
     }
 
+
 }
