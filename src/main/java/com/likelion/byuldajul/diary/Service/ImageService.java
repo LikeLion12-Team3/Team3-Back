@@ -50,7 +50,7 @@ public class ImageService {
 
             String accessUrl = amazonS3Client.getUrl(bucketName, filename).toString();
             image.setAccessUrl(accessUrl);
-            String imgUrl = accessUrl + filename;
+            String imgUrl = accessUrl;
             image.setAccessUrl(imgUrl);
         } catch (IOException e) {
 
