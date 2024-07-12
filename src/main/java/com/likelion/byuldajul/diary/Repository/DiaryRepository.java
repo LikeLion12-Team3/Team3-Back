@@ -29,5 +29,5 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     @Query("SELECT d.id FROM Diary d WHERE d.user.email = :email ORDER BY d.createdAt DESC")
     List<Long> findTopByUserEmailOrderByCreatedAtDesc(@Param("email") String email, Pageable pageable);
 
-    void deleteByUser(User user);
+    void deleteAllByUser(User user);
 }

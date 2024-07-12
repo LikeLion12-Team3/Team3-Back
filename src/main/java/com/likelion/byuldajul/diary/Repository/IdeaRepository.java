@@ -16,5 +16,5 @@ public interface IdeaRepository extends JpaRepository<Idea, Long> {
 
     void deleteIdeaById(Long id);
 
-    void deleteByUser(User user);
+    void deleteAllByUser(User user);
 }

@@ -23,5 +23,5 @@ public interface CommitRepository extends JpaRepository<Commit, Long> {
 
     void deleteByDiary_Id(Long id);
 
-    void deleteByUser(User user);
+    void deleteAllByUser(User user);
 }
